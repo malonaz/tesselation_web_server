@@ -2,25 +2,6 @@ const http = require('http');
 const debug = require('debug')('server');
 const app = require('./app');
 
-module.exports = {
-  start: (port) => {
-    app.set('port', port);
-
-    var server = http.createServer(app);
-
-    server.on('error', (error) => {
-      onError(error, port);
-    });
-
-    server.on('listening', () => {
-      onListening(server);
-    });
-
-    server.listen(port);
-    return server;
-  }
-};
-
 /*
  * Event listener for HTTP server "error" event.
  */
@@ -29,7 +10,7 @@ function onError(error, port) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -50,9 +31,28 @@ function onError(error, port) {
  * Event listener for HTTP server "listening" event.
  */
 function onListening(server) {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  let addr = server.address();
+  let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+module.exports = {
+  start: (port) => {
+    app.set('port', port);
+
+    let server = http.createServer(app);
+
+    server.on('error', (error) => {
+      onError(error, port);
+    });
+
+    server.on('listening', () => {
+      onListening(server);
+    });
+
+    server.listen(port);
+    return server;
+  }
+};
