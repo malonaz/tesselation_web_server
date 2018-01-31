@@ -54,47 +54,4 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 router(app);
 
-app.use((req, res) => {
-  if (req.accepts('json')) {
-    return res
-      .status(404)
-      .json({
-        status: 'error',
-        msg: 'The resource is not found.'
-      });
-  }
-
-  return res
-    .status(406)
-    .send('Page not found');
-});
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (process.env.NODE_ENV === 'development') {
-  // eslint-disable-next-line max-params
-  app.use((err, req, res) => {
-    return res
-      .status(err.status || 500)
-      .json({
-        msg: err.message,
-        status: 'error',
-        err: err
-      });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-// eslint-disable-next-line max-params
-app.use((err, req, res) => {
-  return res
-    .status(err.status || 500)
-    .json({
-      msg: err.message,
-      status: 'error'
-    });
-});
-
 module.exports = app;
