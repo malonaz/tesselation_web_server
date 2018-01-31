@@ -6,7 +6,7 @@ const ENDPOINTS_PATH = path.join(__dirname, 'endpoints');
 
 // eslint-disable-next-line no-sync
   
-module.routes = (app) => {
+module.exports = (app) => {
   fs.readdir(ENDPOINTS_PATH, (files) => {
     files
       .filter((file) => file.endsWith(".js"))
