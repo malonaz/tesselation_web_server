@@ -1,3 +1,35 @@
-This project is created from a GitLab [Project Template](https://docs.gitlab.com/ce/gitlab-basics/create-project.html)
+Web App
 
-Additions and changes to the project can be proposed [on the original project](https://gitlab.com/gitlab-org/project-templates/express)
+# Set up
+
+After cloning the repository, you need to install the dependencies described in `package.json` by running the command:
+
+    $ npm i
+    
+Whenever `package.json` gets modified, you should run `npm i` to install new dependencies or update existing ones.
+
+# Running Web App
+
+To run the web app, run the command:
+
+    $ npm start
+    
+By default, the web server will run on port `3000`. Hence when you visit http://localhost:3000/, you should see the web app responding.
+
+If you're in development environment and would like the app to restart whenever you make changes (the changes to the app will not be reflected unless the app is restarted), you can use a library called `nodemon` to help you do this. Install `nodemon` globally by running the command:
+
+    $ npm i -g nodemon
+    
+After installing `nodemon`, you can use `nodemon` instead of `npm start` to monitor and restart the web app as needed.
+
+# Running Tests
+
+To run tests, run the command:
+
+    $ npm test
+    
+# Code Linting
+
+To run code linting, run the command:
+
+    $ npm run lint
