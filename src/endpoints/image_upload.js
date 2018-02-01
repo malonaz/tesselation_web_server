@@ -27,9 +27,12 @@ router.post('/', (req, res, next) => {
       res.status(err.status || 500).json({ "error": { "status_code": err.status || 500, "message": err.code } });
       console.log("error: " + err.code);
       return;
-    } else {
-      console.log("file recieved: " + Date.now());
-      return res.end('File received.');
+    } else if (!req.file) {
+      console.log("No file uploaded: " + Date.now())
+      return res.end('No file uploaded.')
+    } else{
+      console.log("File uploaded: " + Date.now());
+      return res.end('File uploaded.');
     }
   });
 });
