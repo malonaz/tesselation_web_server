@@ -28,8 +28,12 @@ To run tests, run the command:
 
     $ npm test
     
+We're writing unit tests using Mocha unit testing framework. Test files are found in the `test` folder.
+    
 # Code Linting
 
 To run code linting, run the command:
 
     $ npm run lint
+    
+Code linting tool we're using is ESLint.
