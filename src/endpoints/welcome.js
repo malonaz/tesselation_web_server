@@ -5,6 +5,6 @@ module.exports = router;
 router.get('/', (req, res, next) => {
   res
     .json({
-      msg: 'hello xinzi.'
+      msg: 'the start of an amazing app.'
     });
 });
