@@ -1,25 +1,44 @@
 const router = require('express').Router();
-var multer = require('multer');
-var storage = multer.diskStorage({
+const multer = require('multer');
+const fs = require('fs')
+const os = require('os');
+const crypto = require('crypto');
+const hashFile = require('./../lib/hashFile');
+
+module.exports = router;
+
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-        cb(null, __dirname + '/puzzle_images/uploads')
-    },
+    cb(null, os.tmpdir());
+  },
+  fileFilter: function (req, file, cb) {
+     if (file.mimetype !== 'image/jpg') {
+       console.log('file type error');
+       return cb(null, false, new Error('File Upload Error'));
+     }
+   },
   filename: function(req, file, cb){
-    console.log(file.mimetype);
-    cb(null, file.originalname + '-' + Date.now() + getExtension(file));
+    let buf = crypto.randomBytes(32);
+    let temp_name = buf.toString('hex');
+    cb(null, temp_name + '.jpg');
   }
 });
 
-function getExtension(file) {
-    var res = '';
-    if (file.mimetype === 'image/jpeg') res = '.jpg';
-    if (file.mimetype === 'image/png') res = '.png';
-    return res;
+const upload = multer({storage : storage}).single('puzzle');
+
+function moveFileHashedRename(hash, old_filename) {
+  console.log(hash);
+  console.log(old_filename);
+  const new_filename = 'photo.jpg';
+  const dir = __dirname + '/puzzle_images/uploads/' + hash;
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+    fs.rename(old_filename, dir + '/' + new_filename);
+  }
+  else {
+    console.log('Puzzle Folder Already Exists');
+  }
 }
-
-var upload = multer({storage : storage}).single('puzzle');
-
-module.exports = router;
 
 router.post('/', (req, res, next) => {
   upload(req, res, function(err){
@@ -28,11 +47,16 @@ router.post('/', (req, res, next) => {
       console.log("error: " + err.code);
       return;
     } else if (!req.file) {
-      console.log("No file uploaded: " + Date.now())
-      return res.end('No file uploaded.')
+      console.log("File Upload Error")
+      return res.end('File Upload Error')
     } else{
-      console.log("File uploaded: " + Date.now());
-      return res.end('File uploaded.');
+      const file = os.tmpdir() + '/' + req.file.filename;
+      hashFile(file)
+        .then((hash) => {
+        moveFileHashedRename(hash, file);
+        });
+      console.log("File uploaded!" );
+      return res.end('File uploaded!');
     }
   });
 });
