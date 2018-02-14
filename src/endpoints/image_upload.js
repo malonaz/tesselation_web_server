@@ -33,12 +33,11 @@ function moveFileHashedRename(hash, old_filename) {
   console.log(old_filename);
   const new_filename = 'photo.jpg';
   const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
-  if (!fs.existsSync(dir)){
+  if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
     fs.rename(old_filename, dir + new_filename);
-  }
-  else {
-    console.log('Puzzle Folder Already Exists');
+  } else {
+    fs.unlink(old_filename);
   }
 }
 
