@@ -19,7 +19,6 @@ const storage = multer.diskStorage({
 });
 
 function fileFilter (req, file, cb) {
-  console.log(file.mimetype);
   if (file.mimetype !== 'image/jpeg') {
      cb(new Error('File Upload Error'), false);
    }
@@ -29,8 +28,6 @@ function fileFilter (req, file, cb) {
 const upload = multer({storage : storage, fileFilter: fileFilter}).single('puzzle');
 
 function moveFileHashedRename(hash, old_filename) {
-  console.log(hash);
-  console.log(old_filename);
   const new_filename = 'photo.jpg';
   const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
   if (!fs.existsSync(dir)) {
