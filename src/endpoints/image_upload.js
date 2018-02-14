@@ -2,6 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const fs = require('fs')
 const os = require('os');
+const child_process = require('child_process');
 const crypto = require('crypto');
 const hashFile = require('./../lib/hashFile');
 
@@ -27,12 +28,29 @@ function fileFilter (req, file, cb) {
 
 const upload = multer({storage : storage, fileFilter: fileFilter}).single('puzzle');
 
+function processImage(file, hash) {
+  const executable = process.env.SOLVER_MODULE_BIN + 'demo';
+  const puzzle_file = file;
+  child_process.exec('"' + executable + '" "' + file + '"', function(error, stdout, stderr){
+   console.log(error);
+   console.log(stderr);
+   console.log(stdout);
+   });
+   fs.writeFile(process.env.UPLOAD_DIR + '/' + hash + '/solving', "", function(err) {
+     if(err) {
+         return console.log(err);
+     }
+ });
+}
+
 function moveFileHashedRename(hash, old_filename) {
   const new_filename = 'photo.jpg';
   const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
-    fs.rename(old_filename, dir + new_filename);
+    const new_dir = dir + new_filename;
+    fs.rename(old_filename, new_dir);
+    processImage(new_dir, hash);
   } else {
     fs.unlink(old_filename);
   }
