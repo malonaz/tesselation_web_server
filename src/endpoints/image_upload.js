@@ -29,7 +29,8 @@ function fileFilter (req, file, cb) {
 const upload = multer({storage : storage, fileFilter: fileFilter}).single('puzzle');
 
 function processImage(file, hash) {
-  const executable = process.env.SOLVER_MODULE_BIN + 'demo';
+  //const executable = process.env.SOLVER_MODULE_BIN + 'demo';
+  const executable = process.env.TEST_SOLVER_DIR;
   const puzzle_file = file;
   child_process.exec('"' + executable + '" "' + file + '"', function(error, stdout, stderr){
    console.log(error);
