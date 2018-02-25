@@ -32,7 +32,7 @@ function processImage(file, hash) {
   //const executable = process.env.SOLVER_MODULE_BIN + 'demo';
   const executable = process.env.TEST_SOLVER_DIR;
   const puzzle_file = file;
-  child_process.exec('"' + executable + '" "' + file + '"', function(error, stdout, stderr){
+  child_process.exec('"' + executable + '" "' + file + '" "' + hash + '"', function(error, stdout, stderr){
    console.log(error);
    console.log(stderr);
    console.log(stdout);
