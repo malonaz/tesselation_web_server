@@ -33,16 +33,16 @@ function processImage(file, hash) {
   const executable = process.env.PRJ_DIR + process.env.TEST_SOLVER_DIR;
   const upload_dir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + hash
   const puzzle_file = file;
+  fs.writeFile(upload_dir + '/solving', "", function(err) {
+     if (err) {
+      return console.log(err);
+    }
+  });
   child_process.exec('"' + executable + '" "' + file + '" "' + upload_dir + '"', function(error, stdout, stderr){
-   console.log(error);
-   console.log(stderr);
-   console.log(stdout);
+    console.log(error);
+    console.log(stderr);
+    console.log(stdout);
    });
-   fs.writeFile(upload_dir + '/solving', "", function(err) {
-     if(err) {
-         return console.log(err);
-     }
- });
 }
 
 function moveFileHashedRename(hash, old_filename) {
