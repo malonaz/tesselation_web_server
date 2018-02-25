@@ -25,6 +25,7 @@
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "mocha": "^5.0.0",
-    "nodemon": "^1.14.11"
+    "nodemon": "^1.14.11",
+    "nyc": "^11.4.1"
   }
 }
