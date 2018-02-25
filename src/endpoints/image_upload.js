@@ -30,14 +30,15 @@ const upload = multer({storage : storage, fileFilter: fileFilter}).single('puzzl
 
 function processImage(file, hash) {
   //const executable = process.env.SOLVER_MODULE_BIN + 'demo';
-  const executable = process.env.TEST_SOLVER_DIR;
+  const executable = process.env.PRJ_DIR + process.env.TEST_SOLVER_DIR;
+  const upload_dir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + hash
   const puzzle_file = file;
-  child_process.exec('"' + executable + '" "' + file + '" "' + hash + '"', function(error, stdout, stderr){
+  child_process.exec('"' + executable + '" "' + file + '" "' + upload_dir + '"', function(error, stdout, stderr){
    console.log(error);
    console.log(stderr);
    console.log(stdout);
    });
-   fs.writeFile(process.env.UPLOAD_DIR + '/' + hash + '/solving', "", function(err) {
+   fs.writeFile(upload_dir + '/solving', "", function(err) {
      if(err) {
          return console.log(err);
      }
@@ -46,7 +47,7 @@ function processImage(file, hash) {
 
 function moveFileHashedRename(hash, old_filename) {
   const new_filename = 'photo.jpg';
-  const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
+  const dir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + hash + '/';
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
     const new_dir = dir + new_filename;
