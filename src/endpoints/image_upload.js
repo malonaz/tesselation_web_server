@@ -47,7 +47,7 @@ function processImage(file, hash) {
 
 function moveFileHashedRename(hash, old_filename) {
   const new_filename = 'photo.jpg';
-  const dir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + hash + '/';
+  const dir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + hash + '/';
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
     const new_dir = dir + new_filename;
