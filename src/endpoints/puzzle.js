@@ -7,10 +7,12 @@ router.post('/check', (req, res, next) => {
   const hash = req.body.hash;
   console.log(hash);
   if (!/^[0-9A-F]+$/i.test(hash)) {
+    console.log('not a hash');
     return res.json({msg: 'error! puzzle not found'})
   }
-  let file = process.env.UPLOAD_DIR + '/' + hash
+  let file = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + hash
   if (!fs.existsSync(file)) {
+    console.log(file);
     return res.json({msg: 'error! puzzle not found'})
   }
   pieces_array = [];
