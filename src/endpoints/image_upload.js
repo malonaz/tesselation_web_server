@@ -5,6 +5,7 @@ const os = require('os');
 const child_process = require('child_process');
 const crypto = require('crypto');
 const hashFile = require('./../lib/hashFile');
+const noop = () => {};
 
 module.exports = router;
 
@@ -12,18 +13,18 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, os.tmpdir());
   },
-  filename: function(req, file, cb){
+  filename: function(req, file, cb) {
     let buf = crypto.randomBytes(32);
     let temp_name = buf.toString('hex');
     cb(null, temp_name + '.jpg');
   },
 });
 
-function fileFilter (req, file, cb) {
+function fileFilter(req, file, cb) {
   if (file.mimetype !== 'image/jpeg') {
-     cb(new Error('File Upload Error'), false);
-   }
-   cb(null, true);
+    cb(new Error('File Upload Error'), false);
+  }
+  cb(null, true);
 }
 
 const upload = multer({storage : storage, fileFilter: fileFilter}).single('puzzle');
@@ -34,7 +35,7 @@ function processImage(file, hash) {
   const upload_dir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + hash
   const puzzle_file = file;
   fs.writeFile(upload_dir + '/solving', "", function(err) {
-     if (err) {
+    if (err) {
       return console.log(err);
     }
   });
@@ -51,10 +52,10 @@ function moveFileHashedRename(hash, old_filename) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
     const new_dir = dir + new_filename;
-    fs.rename(old_filename, new_dir);
+    fs.rename(old_filename, new_dir, noop);
     processImage(new_dir, hash);
   } else {
-    fs.unlink(old_filename);
+    fs.unlink(old_filename, noop);
   }
 }
 
