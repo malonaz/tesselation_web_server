@@ -15,7 +15,7 @@ describe('Cart', () => {
           res.body.should.be.an('object');
           res.body.should.have.property('msg');
           res.body.msg.should.be.an('string');
-          res.body.msg.should.be.equals('hello xinzi.');
+          res.body.msg.should.be.equals('the start of an amazing app.');
           done();
         });
     });
