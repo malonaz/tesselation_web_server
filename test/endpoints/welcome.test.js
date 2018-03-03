@@ -5,7 +5,7 @@ const server = require('../server');
 
 chai.use(chaiHttp);
 
-describe('Cart', () => {
+describe('welcome', () => {
   describe('GET /welcome', () => {
     it('should return hello message', () => {
       chai.request(server)

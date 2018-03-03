@@ -5,7 +5,7 @@ const expect = chai.expect;
 describe('hashFile', () => {
 
   it('should read a file and provide a hash', (done) =>{
-    let file = "test/lib/test.jpg";
+    let file = "test/test.jpg";
     hashFile(file)
       .then((hash) => {
         expect(hash).to.be.a('string');

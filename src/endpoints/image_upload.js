@@ -62,8 +62,7 @@ function moveFileHashedRename(hash, old_filename) {
 router.post('/', (req, res, next) => {
   upload(req, res, function(err){
     if(err) {
-      res.status(err.status || 500).json({ "error": { "status_code": err.status || 500, "message": err.code } });
-      console.log("error: " + err.code);
+      res.status(err.status || 500).json({ error: { "status_code": err.status || 500, "error": err.code } });
       return;
     } else if (!req.file) {
       return res.json({msg:'File Upload Error'})
