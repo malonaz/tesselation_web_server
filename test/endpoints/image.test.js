@@ -14,14 +14,14 @@ const TEST_HASH_UPLOAD = '67affb51d7ea5c6a9a6bd0d86e3008b3377f70c15a8ebc7d6bf6cc
 
 chai.use(chaiHttp);
 
-describe('image_upload', () => {
+describe('image/upload', () => {
 
   describe('POST / : no upload file', (done) => {
     // no upload file
     it('should check and return {msg: error! puzzle not found}', () => {
       let file = process.env.PRJ_DIR + process.env.WEB_TEST_DIR + '/test.txt';
       chai.request(server)
-        .post('/image_upload')
+        .post('/image/upload')
         .attach('puzzle', fs.readFileSync(file), 'test_upload_text.txt')
         .end((err, res) => {
           res.should.hav.status(500);
@@ -37,7 +37,7 @@ describe('image_upload', () => {
     // null upload
     it('should check and return {msg: File Upload Error}', () => {
       chai.request(server)
-        .post('/image_upload')
+        .post('/image/upload')
         .send('puzzle', '')
         .set('content-type', 'image/jpeg')
         .end((err, res) => {
@@ -64,7 +64,7 @@ describe('image_upload', () => {
     it('should check the hash and return {hash: 67aff....}', () => {
       let file = process.env.PRJ_DIR + process.env.WEB_TEST_DIR + '/upload_test.jpeg';
       chai.request(server)
-        .post('/image_upload')
+        .post('/image/upload')
         .attach('puzzle', fs.readFileSync(file), 'test_upload_image.jpg')
         .end((err, res) => {
           res.body.should.be.json;
@@ -80,7 +80,7 @@ describe('image_upload', () => {
     it('should check the hash and return {hash: hash}', () => {
       let file = process.env.PRJ_DIR + process.env.WEB_TEST_DIR + '/test2.jpg';
       chai.request(server)
-        .post('/image_upload')
+        .post('/image/upload')
         .attach('puzzle', fs.readFileSync(file), 'test_upload_image_exist.jpg')
         .end((err, res) => {
           res.body.should.be.json;

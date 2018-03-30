@@ -59,7 +59,7 @@ function moveFileHashedRename(hash, old_filename) {
   }
 }
 
-router.post('/', (req, res, next) => {
+router.post('/upload', (req, res, next) => {
   upload(req, res, function(err){
     if(err) {
       res.status(err.status || 500).json({ error: { "status_code": err.status || 500, "error": err.code } });

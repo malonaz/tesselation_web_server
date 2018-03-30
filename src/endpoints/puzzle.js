@@ -21,7 +21,3 @@ router.post('/check', (req, res, next) => {
     res.json({solving: true});
   }
 });
-
-/* TODO when solver complete
-
-*/
