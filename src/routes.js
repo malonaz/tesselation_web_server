@@ -53,19 +53,18 @@ function handleEndpointFiles(app, files) {
   files
     .filter((file) => file.endsWith('.js'))
     .forEach((file) => {
-      // eslint-disable-next-line global-require
       const filepath = path.join(ENDPOINTS_PATH, file);
-      const route = API_PREFIX + '/' + file.substring(0, file.length-3);
+      const route = API_PREFIX + '/' + file.substring(0, file.length - 3);
+      // eslint-disable-next-line global-require
       app.use(route, require(filepath));
     });
-  setupErrorHandling
+  setupErrorHandling(app);
 }
 
 module.exports = (app) => {
   fs.readdir(ENDPOINTS_PATH, (err, files) => {
     if (err) {
       throw err;
-      return;
     }
     handleEndpointFiles(app, files);
   });
