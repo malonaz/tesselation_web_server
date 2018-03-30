@@ -5,7 +5,10 @@ const API_PREFIX = '';
 const ENDPOINTS_PATH = path.join(__dirname, 'endpoints');
 
 function setupErrorHandling(app) {
-  app.use((req, res) => {
+  app.use((err, req, res, next) => {
+    if (err) {
+      return next(err);
+    }
     if (req.accepts('json')) {
       return res
         .status(404)
@@ -25,7 +28,7 @@ function setupErrorHandling(app) {
   // will print stacktrace
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line max-params
-    app.use((err, req, res) => {
+    app.use((err, req, res, next) => {
       return res
         .status(err.status || 500)
         .json({
@@ -39,7 +42,7 @@ function setupErrorHandling(app) {
   // production error handler
   // no stacktraces leaked to user
   // eslint-disable-next-line max-params
-  app.use((err, req, res) => {
+  app.use((err, req, res, next) => {
     return res
       .status(err.status || 500)
       .json({
@@ -58,7 +61,6 @@ function handleEndpointFiles(app, files) {
       // eslint-disable-next-line global-require
       app.use(route, require(filepath));
     });
-  setupErrorHandling(app);
 }
 
 module.exports = (app) => {
@@ -67,5 +69,6 @@ module.exports = (app) => {
       throw err;
     }
     handleEndpointFiles(app, files);
+    setupErrorHandling(app);
   });
 };
