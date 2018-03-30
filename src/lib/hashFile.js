@@ -9,7 +9,7 @@ module.exports = function hashFile(filename) {
     const input = fs.createReadStream(filename);
     input
       .pipe(hash)
-      .on('finish', () => {
+      .on('finish', function onFinish() {
         resolve(this.read());
       });
   });
