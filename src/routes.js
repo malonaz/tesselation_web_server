@@ -5,6 +5,7 @@ const API_PREFIX = '';
 const ENDPOINTS_PATH = path.join(__dirname, 'endpoints');
 
 function setupErrorHandling(app) {
+  // eslint-disable-next-line max-params
   app.use((err, req, res, next) => {
     if (err) {
       return next(err);
@@ -27,7 +28,7 @@ function setupErrorHandling(app) {
   // development error handler
   // will print stacktrace
   if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line max-params
+    // eslint-disable-next-line max-params, no-unused-vars
     app.use((err, req, res, next) => {
       return res
         .status(err.status || 500)
@@ -41,7 +42,7 @@ function setupErrorHandling(app) {
 
   // production error handler
   // no stacktraces leaked to user
-  // eslint-disable-next-line max-params
+  // eslint-disable-next-line max-params, no-unused-vars
   app.use((err, req, res, next) => {
     return res
       .status(err.status || 500)
