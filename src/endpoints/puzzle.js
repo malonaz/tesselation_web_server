@@ -1,14 +1,17 @@
 const router = require('express').Router();
 const fs = require('fs');
+const Promise = require('bluebird');
 
 module.exports = router;
 
-function readPieces(filename, callback) {
-  fs.readFile(filename, (err, data) => {
-    if (err) {
-      throw err;
-    }
-    callback(data);
+function readPieces(filename) {
+  return new Promise((resolve) => {
+    fs.readFile(filename, (err, data) => {
+      if (err) {
+        throw err;
+      }
+      resolve(data);
+    });
   });
 }
 
@@ -33,9 +36,13 @@ router.post('/check', (req, res, next) => {
 
   let pieces_file = file + '/pieces';
 
-  readPieces(pieces_file, (data) => {
-    res.json({ processing: false, pieces: data });
-  });
+  readPieces(pieces_file)
+    .then((data) => {
+      res.json({
+        processing: false,
+        pieces: data
+      });
+    });
 });
 
 // router.post('/solution', (req, res, next)) => {
