@@ -18,7 +18,7 @@ describe('POST /puzzle/check', () => {
       chai.request(server)
         .post('/puzzle/check')
         .set('content-type', 'application/json')
-        .send({hash: 'i am a normal string'})
+        .send({ hash: 'i am a normal string' })
         .end((err, res) => {
           expect(res).to.have.property('status');
           expect(res.status).to.be.equals(500);
@@ -36,7 +36,7 @@ describe('POST /puzzle/check', () => {
       chai.request(server)
         .post('/puzzle/check')
         .set('content-type', 'application/json')
-        .send({hash: TEST_HASH_NOT_EXISTS})
+        .send({ hash: TEST_HASH_NOT_EXISTS })
         .end((err, res) => {
           expect(res).to.have.property('status');
           expect(res.status).to.be.equals(500);
@@ -52,7 +52,7 @@ describe('POST /puzzle/check', () => {
       // good hash - solving exists
       let file = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + TEST_HASH_SOLVING + '/solving';
       if (!fs.existsSync(file)) {
-        fs.writeFile(file, '', (err) =>{
+        fs.writeFile(file, '', (err) => {
           if (err) throw err;
           done();
         });
@@ -80,7 +80,7 @@ describe('POST /puzzle/check', () => {
       // good hash - solving does not exists
       let file = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + process.env.TEST_HASH_SOLVED + '/solving';
       if (fs.existsSync(file)) {
-        fs.unlink(file, (err) =>{
+        fs.unlink(file, (err) => {
           if (err) throw err;
           done();
         });
@@ -91,13 +91,13 @@ describe('POST /puzzle/check', () => {
       chai.request(server)
         .post('/puzzle/check')
         .set('content-type', 'application/json')
-        .send({hash: process.env.TEST_HASH_SOLVED})
+        .send({ hash: process.env.TEST_HASH_SOLVED })
         .end((err, res) => {
           expect(res).to.have.property('status');
           expect(res.status).to.be.equals(200);
           expect(res).to.be.json;
           expect(res.body).to.have.property('processing');
-          expect(res.body.processing).to.be.false
+          expect(res.body.processing).to.be.false;
           expect(res.body).to.have.property('pieces');
           expect(res.body.pieces).to.be.a('string');
           done();
