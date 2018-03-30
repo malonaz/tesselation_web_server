@@ -13,7 +13,7 @@ const TEST_HASH_UPLOAD = '67affb51d7ea5c6a9a6bd0d86e3008b3377f70c15a8ebc7d6bf6cc
 
 chai.use(chaiHttp);
 
-describe('POST image/upload', () => {
+describe('POST /image/upload', () => {
 
   describe('no upload file', () => {
     // no upload file
@@ -33,7 +33,7 @@ describe('POST image/upload', () => {
     });
   });
 
-  describe('upload is empty', (done) => {
+  describe('upload is empty', () => {
     // null upload
     it('should check and return {msg: File Upload Error}', (done) => {
       chai.request(server)
@@ -65,6 +65,7 @@ describe('POST image/upload', () => {
         });
       }
     });
+
     it('should check the hash and return {hash: 67aff....}', (done) => {
       let file = process.env.PRJ_DIR + process.env.WEB_TEST_DIR + '/upload_test.jpeg';
       chai.request(server)
@@ -94,6 +95,7 @@ describe('POST image/upload', () => {
           expect(res).to.be.json;
           expect(res.body).to.have.property('hash');
           expect(res.body.msg).to.be.equals(TEST_HASH_SOLVED);
+          done();
         });
       });
     });
