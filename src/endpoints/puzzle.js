@@ -22,7 +22,7 @@ router.post('/check', (req, res, next) => {
     return;
   }
 
-  let file = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + hash
+  let file = process.env.UPLOAD_DIR + '/' + hash
   if (!fs.existsSync(file)) {
     next(new Error('Puzzle not found'));
     return;

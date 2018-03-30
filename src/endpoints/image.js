@@ -30,9 +30,9 @@ function fileFilter(req, file, cb) {
 
 function processImage(file, hash) {
   // const executable = process.env.SOLVER_MODULE_BIN + 'demo';
-  const executable = process.env.PRJ_DIR + process.env.TEST_SOLVER_DIR;
-  const uploadDir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + hash;
-  fs.writeFile(uploadDir + '/solving', '', (err) => {
+  const executable = process.env.SOLVER_PATH;
+  const uploadDir = process.env.UPLOAD_DIR + '/' + hash;
+  fs.writeFile(uploadDir + '/processing', '', (err) => {
     if (err) {
       console.log(err);
     }
@@ -47,7 +47,7 @@ function processImage(file, hash) {
 
 function moveFileHashedRename(hash, oldFilename) {
   const newFilename = 'photo.jpg';
-  const dir = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + hash + '/';
+  const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
   if (fs.existsSync(dir)) {
     fs.unlink(oldFilename, noop);
     return;

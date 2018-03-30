@@ -6,6 +6,7 @@ const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const server = require('../server');
 
+const TEST_DATA_DIR = './test';
 const TEST_HASH_SOLVING = '8bfae8c3c31548d76f137ce698aa9a02bdc478411e2b69d8502aaf63b984d8a4';
 const TEST_HASH_SOLVED = 'bb542fcff403f04507d4f4881e9a92c27ac21970dc54ea16b28aeda35971c65b';
 const TEST_HASH_NOT_EXISTS = '0bfae8c3c31548d76f137ce698aa9a02bdc478411e2b69d8502aaf63b984d8a4';
@@ -18,7 +19,7 @@ describe('POST /image/upload', () => {
   describe('no upload file', () => {
     // no upload file
     it('should check and return {msg: error! puzzle not found}', (done) => {
-      let file = process.env.PRJ_DIR + process.env.WEB_TEST_DIR + '/test.txt';
+      let file = TEST_DATA_DIR + '/test.txt';
       chai.request(server)
         .post('/image/upload')
         .attach('puzzle', fs.readFileSync(file), 'test_upload_text.txt')
@@ -55,7 +56,7 @@ describe('POST /image/upload', () => {
     // new picture
     // delete folder before test
     before((done) => {
-      let folder = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + TEST_HASH_UPLOAD;
+      let folder = process.env.UPLOAD_DIR + '/' + TEST_HASH_UPLOAD;
       if (fse.exists(folder)) {
         console.log('path exists');
         fse.remove(folder, (err) =>{
@@ -67,7 +68,7 @@ describe('POST /image/upload', () => {
     });
 
     it('should check the hash and return {hash: 67aff....}', (done) => {
-      let file = process.env.PRJ_DIR + process.env.WEB_TEST_DIR + '/upload_test.jpeg';
+      let file = TEST_DATA_DIR + '/upload_test.jpeg';
       chai.request(server)
         .post('/image/upload')
         .attach('puzzle', fs.readFileSync(file), 'test_upload_image.jpg')
@@ -85,7 +86,7 @@ describe('POST /image/upload', () => {
   describe('upload pre-existing picture', () => {
     // picture already exists
     it('should check the hash and return {hash: hash}', (done) => {
-      let file = process.env.PRJ_DIR + process.env.WEB_TEST_DIR + '/test2.jpg';
+      let file = TEST_DATA_DIR + '/test2.jpg';
       chai.request(server)
         .post('/image/upload')
         .attach('puzzle', fs.readFileSync(file), 'test_upload_image_exist.jpg')
