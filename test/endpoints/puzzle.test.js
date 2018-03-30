@@ -52,7 +52,7 @@ describe('POST /puzzle/check', () => {
       // good hash - solving exists
       let file = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + TEST_HASH_SOLVING + '/solving';
       if (!fs.existsSync(file)) {
-        fs.writeFile(file, (err) =>{
+        fs.writeFile(file, '', (err) =>{
           if (err) throw err;
           done();
         });
@@ -63,7 +63,7 @@ describe('POST /puzzle/check', () => {
       chai.request(server)
         .post('/puzzle/check')
         .set('content-type', 'application/json')
-        .send({hash: TEST_HASH_SOLVING})
+        .send({ hash: TEST_HASH_SOLVING })
         .end((err, res) => {
           expect(res).to.have.property('status');
           expect(res.status).to.be.equals(200);
