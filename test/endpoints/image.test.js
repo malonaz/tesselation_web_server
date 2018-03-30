@@ -1,4 +1,4 @@
-const app = require('../../src/endpoints/image_upload')
+const app = require('../../src/endpoints/image')
 const chai = require('chai');
 const fs = require('fs')
 const fse = require('fs-extra')
