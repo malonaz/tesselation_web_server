@@ -37,7 +37,7 @@ describe('puzzle', () => {
         .set('content-type', 'application/json')
         .send({hash: TEST_HASH_NOT_EXISTS})
         .end((err, res) => {
-          res.should.have.status(300);
+          res.should.have.status(200);
           res.body.should.be.json;
           res.body.should.have.property('msg');
           res.body.msg.should.be.equals('error! puzzle not found')
@@ -51,7 +51,7 @@ describe('puzzle', () => {
     if (!fs.existsSync(file)) {
       fs.writeFile(file);
     }
-    it('should check the hash and return {solving: true}', () => {
+    it('should check the hash and return {processing: true}', () => {
       chai.request(server)
         .post('/puzzle/check')
         .set('content-type', 'application/json')
@@ -59,7 +59,7 @@ describe('puzzle', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.json;
-          res.body.should.have.property('solving');
+          res.body.should.have.property('processing');
           res.body.solving.should.be.true;
           done();
         });
@@ -74,7 +74,7 @@ describe('puzzle', () => {
         if (err) throw err;
       });
     }
-    it('should check the hash and return {solving: false}', () => {
+    it('should check the hash and return {processing: false}', () => {
       chai.request(server)
         .post('/puzzle/check')
         .set('content-type', 'application/json')
@@ -82,12 +82,10 @@ describe('puzzle', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.json;
-          res.body.should.have.property('solving');
+          res.body.should.have.property('processing');
           res.body.solving.should.be.false;
-          res.body.should.have.property('pieces_array');
-          res.body.pieces_array.should.be.an('array');
-          res.body.should.have.property('solutions_array');
-          res.body.solutions_array.should.be.an('array');
+          res.body.should.have.property('pieces_data');
+          res.body.pieces_array.should.be.a('string');
           done();
         });
     });
