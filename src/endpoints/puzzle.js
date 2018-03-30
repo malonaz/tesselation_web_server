@@ -3,12 +3,12 @@ const fs = require('fs');
 
 module.exports = router;
 
-function readPieces(filename) {
+function readPieces(filename, callback) {
   fs.readFile(filename, (err, data) => {
     if (err) {
       throw err;
     }
-    return data;
+    callback(data);
   });
 }
 
@@ -32,8 +32,10 @@ router.post('/check', (req, res, next) => {
   }
 
   let pieces_file = file + '/pieces';
-  let pieces_data = readPieces(pieces_file);
-  res.json({ processing: false, pieces: pieces_data });
+
+  readPieces(pieces_file, (data) => {
+    res.json({ processing: false, pieces: data });
+  });
 });
 
 // router.post('/solution', (req, res, next)) => {
