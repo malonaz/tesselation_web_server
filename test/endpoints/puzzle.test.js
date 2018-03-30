@@ -47,7 +47,7 @@ describe('POST /puzzle/check', () => {
         });
     });
   });
-  describe('solving file exist', () => {
+  describe('processing file exist', () => {
     before((done) => {
       // good hash - solving exists
       let file = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + TEST_HASH_SOLVING + '/solving';
@@ -75,7 +75,7 @@ describe('POST /puzzle/check', () => {
     });
   });
 
-  describe('solving file does not exist', () => {
+  describe('processing file does not exist', () => {
     before((done) => {
       // good hash - solving does not exists
       let file = process.env.PRJ_DIR + process.env.UPLOAD_DIR + '/' + process.env.TEST_HASH_SOLVED + '/solving';

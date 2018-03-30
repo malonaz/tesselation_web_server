@@ -76,7 +76,7 @@ describe('POST /image/upload', () => {
           expect(res.status).to.be.equals(200);
           expect(res).to.be.json;
           expect(res.body).to.have.property('hash');
-          expect(res.body.msg).to.be.equals(TEST_HASH_UPLOAD);
+          expect(res.body.hash).to.be.equals(TEST_HASH_UPLOAD);
           done();
         });
     });
@@ -94,7 +94,7 @@ describe('POST /image/upload', () => {
           expect(res.status).to.be.equals(200);
           expect(res).to.be.json;
           expect(res.body).to.have.property('hash');
-          expect(res.body.msg).to.be.equals(TEST_HASH_SOLVED);
+          expect(res.body.hash).to.be.equals(TEST_HASH_SOLVED);
           done();
         });
       });
