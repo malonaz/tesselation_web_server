@@ -58,7 +58,8 @@ function moveFileHashedRename(hash, oldFilename) {
   processImage(newDir, hash);
 }
 
-const upload = multer({ storage: storage, fileFilter: fileFilter }).single('puzzle');
+const upload = multer({ storage: storage, fileFilter: fileFilter })
+  .single('puzzle');
 
 router.post('/upload', (req, res, next) => {
   upload(req, res, (err) => {

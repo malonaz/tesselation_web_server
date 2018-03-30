@@ -1,7 +1,6 @@
-const app = require('../../src/endpoints/image')
 const chai = require('chai');
-const fs = require('fs')
-const fse = require('fs-extra')
+const fs = require('fs');
+const fse = require('fs-extra');
 const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const server = require('../server');
@@ -15,7 +14,6 @@ const TEST_HASH_UPLOAD = '67affb51d7ea5c6a9a6bd0d86e3008b3377f70c15a8ebc7d6bf6cc
 chai.use(chaiHttp);
 
 describe('POST /image/upload', () => {
-
   describe('no upload file', () => {
     // no upload file
     it('should check and return {msg: error! puzzle not found}', (done) => {
@@ -98,6 +96,6 @@ describe('POST /image/upload', () => {
           expect(res.body.hash).to.be.equals(TEST_HASH_SOLVED);
           done();
         });
-      });
     });
+  });
 });

@@ -22,7 +22,7 @@ router.post('/check', (req, res, next) => {
     return;
   }
 
-  let file = process.env.UPLOAD_DIR + '/' + hash
+  let file = process.env.UPLOAD_DIR + '/' + hash;
   if (!fs.existsSync(file)) {
     next(new Error('Puzzle not found'));
     return;
@@ -34,9 +34,9 @@ router.post('/check', (req, res, next) => {
     return;
   }
 
-  let pieces_file = file + '/pieces';
+  let piecesFile = file + '/pieces';
 
-  readPieces(pieces_file)
+  readPieces(piecesFile)
     .then((data) => {
       res.json({
         processing: false,
