@@ -28,8 +28,6 @@ function fileFilter(req, file, cb) {
   cb(null, true);
 }
 
-const upload = multer({ storage: storage, fileFilter: fileFilter }).single('puzzle');
-
 function processImage(file, hash) {
   // const executable = process.env.SOLVER_MODULE_BIN + 'demo';
   const executable = process.env.PRJ_DIR + process.env.TEST_SOLVER_DIR;
@@ -60,14 +58,18 @@ function moveFileHashedRename(hash, oldFilename) {
   processImage(newDir, hash);
 }
 
-router.post('/upload', (req, res) => {
+const upload = multer({ storage: storage, fileFilter: fileFilter }).single('puzzle');
+
+router.post('/upload', (req, res, next) => {
   upload(req, res, (err) => {
     if (err) {
-      throw new Error();
+      next(err);
+      return;
     }
 
     if (!req.file) {
-      throw new Error();
+      next(new Error('File Upload Error'));
+      return;
     }
 
     const file = os.tmpdir() + '/' + req.file.filename;
