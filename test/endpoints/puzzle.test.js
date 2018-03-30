@@ -98,8 +98,8 @@ describe('POST /puzzle/check', () => {
           expect(res).to.be.json;
           expect(res.body).to.have.property('processing');
           expect(res.body.processing).to.be.false
-          expect(res.body).to.have.property('pieces_data');
-          expect(res.body.pieces_data).to.be.a('string');
+          expect(res.body).to.have.property('pieces');
+          expect(res.body.pieces).to.be.a('string');
           done();
         });
     });
