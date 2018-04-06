@@ -51,7 +51,7 @@ describe('POST /puzzle/check', () => {
   describe('processing file exist', () => {
     before((done) => {
       // good hash - solving exists
-      let file = process.env.UPLOAD_DIR + '/' + TEST_HASH_SOLVING + '/solving';
+      let file = process.env.UPLOAD_DIR + '/' + TEST_HASH_SOLVING + '/processing';
       if (!fs.existsSync(file)) {
         fs.writeFile(file, '', (err) => {
           if (err) throw err;
@@ -81,7 +81,7 @@ describe('POST /puzzle/check', () => {
   describe('processing file does not exist', () => {
     before((done) => {
       // good hash - solving does not exists
-      let file = process.env.UPLOAD_DIR + '/' + TEST_HASH_SOLVED + '/solving';
+      let file = process.env.UPLOAD_DIR + '/' + TEST_HASH_SOLVED + '/processing';
       if (fs.existsSync(file)) {
         fs.unlink(file, (err) => {
           if (err) throw err;
