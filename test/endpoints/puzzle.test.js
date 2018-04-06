@@ -138,7 +138,7 @@ describe('POST /puzzle/solution', () => {
   });
 
   describe('not a valid state input', () => {
-    it('should check the hash and return error', (done) => {
+    it('should check the state and return error', (done) => {
       chai.request(server)
         .post('/puzzle/solution')
         .set('content-type', 'application/json')
@@ -155,11 +155,11 @@ describe('POST /puzzle/solution', () => {
   });
 
   describe('valid inputs', () => {
-    it('should check the hash and return error', (done) => {
+    it('should check the hash and state and return 1 2 3 4', (done) => {
       chai.request(server)
         .post('/puzzle/solution')
         .set('content-type', 'application/json')
-        .send({ hash: TEST_HASH_PROCESSED , state: "1 2 3 4" })
+        .send({ hash: TEST_HASH_PROCESSED , state: "1 1 2" })
         .end((err, res) => {
           expect(res).to.have.property('status');
           expect(res.status).to.be.equals(200);
