@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const fs = require('fs');
+const childProcess = require('child_process');
 const Promise = require('bluebird');
 
 module.exports = router;
@@ -45,6 +46,25 @@ router.post('/check', (req, res, next) => {
     });
 });
 
-// router.post('/solution', (req, res, next) => {
-//
-// });
+router.post('/solution', (req, res, next) => {
+  const executable = process.env.PARTIAL_SOLVER_PATH;
+  const hash = req.body.hash;
+  console.log(hash);
+  if (!/^[0-9A-F]+$/i.test(hash)) {
+    next(new Error('Puzzle not found'));
+    return;
+  }
+  const state = req.body.state;
+  console.log(state);
+  if (!/^[\d\s]+$/i.test(state)) {
+    next(new Error('Input Error'));
+    return;
+  }
+  let command = '"' + executable + '" "' + hash + '" "' + state + '"';
+  childProcess.exec(command, (error, stdout, stderr) => {
+    console.log(error);
+    console.log(stderr);
+    console.log(stdout);
+    res.json({ solution: stdout });
+  });
+});

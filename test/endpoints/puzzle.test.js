@@ -112,8 +112,60 @@ describe('POST /puzzle/check', () => {
           expect(res.body).to.have.property('processing');
           expect(res.body.processing).to.be.false;
           expect(res.body).to.have.property('pieces');
-          console.log(res.body);
           expect(res.body.pieces).to.be.a('string');
+          done();
+        });
+    });
+  });
+});
+
+describe('POST /puzzle/solution', () => {
+  describe('not a valid hash input', () => {
+    it('should check the hash and return error', (done) => {
+      chai.request(server)
+        .post('/puzzle/solution')
+        .set('content-type', 'application/json')
+        .send({ hash: "i am a normal string" , state: "1 2 3 4" })
+        .end((err, res) => {
+          expect(res).to.have.property('status');
+          expect(res.status).to.be.equals(500);
+          expect(res).to.be.json;
+          expect(res.body).to.have.property('msg');
+          expect(res.body.msg).to.be.equals('Puzzle not found');
+          done();
+        });
+    });
+  });
+
+  describe('not a valid state input', () => {
+    it('should check the hash and return error', (done) => {
+      chai.request(server)
+        .post('/puzzle/solution')
+        .set('content-type', 'application/json')
+        .send({ hash: TEST_HASH_PROCESSED , state: "a b c" })
+        .end((err, res) => {
+          expect(res).to.have.property('status');
+          expect(res.status).to.be.equals(500);
+          expect(res).to.be.json;
+          expect(res.body).to.have.property('msg');
+          expect(res.body.msg).to.be.equals('Input Error');
+          done();
+        });
+    });
+  });
+
+  describe('valid inputs', () => {
+    it('should check the hash and return error', (done) => {
+      chai.request(server)
+        .post('/puzzle/solution')
+        .set('content-type', 'application/json')
+        .send({ hash: TEST_HASH_PROCESSED , state: "1 2 3 4" })
+        .end((err, res) => {
+          expect(res).to.have.property('status');
+          expect(res.status).to.be.equals(200);
+          expect(res).to.be.json;
+          expect(res.body).to.have.property('solution');
+          expect(res.body.solution).to.be.a('string');
           done();
         });
     });
