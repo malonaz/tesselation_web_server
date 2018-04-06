@@ -6,7 +6,7 @@ module.exports = router;
 
 function readPieces(filename) {
   return new Promise((resolve) => {
-    fs.readFile(filename, (err, data) => {
+    fs.readFile(filename, 'utf8', (err, data) => {
       if (err) {
         throw err;
       }
@@ -45,6 +45,6 @@ router.post('/check', (req, res, next) => {
     });
 });
 
-// router.post('/solution', (req, res, next)) => {
+// router.post('/solution', (req, res, next) => {
 //
-// }
+// });
