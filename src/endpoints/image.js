@@ -29,8 +29,7 @@ function fileFilter(req, file, cb) {
 }
 
 function processImage(file, hash) {
-  // const executable = process.env.SOLVER_MODULE_BIN + 'demo';
-  const executable = process.env.SOLVER_PATH;
+  const executable = process.env.IMAGE_PROCESSOR_PATH;
   const uploadDir = process.env.UPLOAD_DIR + '/' + hash;
   fs.writeFile(uploadDir + '/processing', '', (err) => {
     if (err) {
