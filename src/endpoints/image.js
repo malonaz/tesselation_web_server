@@ -16,9 +16,8 @@ module.exports = router;
   2) calls the solver executable; provides image directory and upload directory
 */
 function processImage(file, hash) {
-  const executable = process.env.SOLVER_PATH; // configured solver path on .env
-  const uploadDir = process.env.UPLOAD_DIR + '/' + hash; //set up all file writes into this folder on disk
-  // processing flag written to folder
+  const executable = process.env.IMAGE_PROCESSOR_PATH;
+  const uploadDir = process.env.UPLOAD_DIR + '/' + hash;
   fs.writeFile(uploadDir + '/processing', '', (err) => {
     if (err) {
       console.log(err);
