@@ -77,7 +77,8 @@ router.post('/solution', (req, res, next) => {
   }
 
   //prepare cmd for solver exec call
-  let command = '"' + executable + '" "' + hash + '" "' + state + '"';
+  const storage = process.env.UPLOAD_DIR + '/' + hash;
+  let command = '"' + executable + '" "' + storage + '" "' + state + '"';
   childProcess.exec(command, (error, stdout, stderr) => {
     console.log(error);
     console.log(stderr);
