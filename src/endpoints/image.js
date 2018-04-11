@@ -9,7 +9,7 @@ const noop = () => {};
 
 module.exports = router;
 
-//////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
+////////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
 
 /**
  * Helper function which logs a given error to the console.
@@ -29,7 +29,7 @@ const logError = function(err){
  *    filename: filepath of image to be processed
  *    hash: hash of the image
  */
-function processImage(filename, hash) {
+function sendToImageProcessor(filename, hash) {
     
     // create upload directory
     const uploadDir = process.env.UPLOAD_DIR + '/' + hash;
@@ -92,7 +92,7 @@ function moveFileHashedRename(hash, filename) {
     fs.unlink(filename, noop); 
 
     // send image to image processor module
-    processImage(newFilename, hash); 
+    sendToImageProcessor(newFilename, hash); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
