@@ -106,7 +106,7 @@ function processImage(hash, filename) {
  *    file: file uploaded through POST request
  *    callback: callback function
  */
-function filterFile(req, file, callback) {
+function fileFilter(req, file, callback) {
     
     // if file is not jpeg, pass a new error and false to the callback function
     if (file.mimetype !== 'image/jpeg') { 
@@ -136,31 +136,36 @@ const storage = multer.diskStorage({
 });
 
 
+// configure upload to single file upload, storage and filter function
+const upload = multer({ storage: storage, fileFilter: fileFilter }).single('puzzle');
 
-/* configuration for upload: single file upload, storage and filter */
-const upload = multer({ storage: storage, filterFile: filterFile })
-  .single('puzzle');
-
-/* handling the upload on /upload */
+// handle /upload endpoint
 router.post('/upload', (req, res, next) => {
   upload(req, res, (err) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    /* error handling for file upload issues */
-    if (!req.file) {
-      next(new Error('File Upload Error'));
-      return;
-    }
-    /* stores file on the temp dir with temp name as configured */
-    const file = os.tmpdir() + '/' + req.file.filename;
-    hashFile(file) // exciting part of hashing the contents of the image to use as unique id
-      .then((hash) => { //async process; waits for the hashing to be completed before sending hash to next process
-        processImage(hash, file); // read the function description >.<
-        res.json({
-          hash: hash //returns hash as json
-        });
+      if (err) {
+	  next(err);
+	  return;
+      }
+      
+      // error handling for file upload issues
+      if (!req.file) {
+	  next(new Error('File Upload Error'));
+	  return;
+      }
+      
+      // stores file on the temp dir with temp name as configured
+      // compute filename that we will save the uploaded file, in the user os' tmp folder
+      const file = os.tmpdir() + '/' + req.file.filename;
+
+      // hash the file. async process so we wait until hashing is completed before proceeded to next step
+      hashFile(file).then((hash) => {
+	  // process image
+          processImage(hash, file);
+
+	  // return hash as JSON
+          res.json({
+              hash: hash 
+          });
       });
   });
 });
