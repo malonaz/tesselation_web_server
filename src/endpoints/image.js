@@ -68,22 +68,31 @@ function moveFile(target, destination) {
 /** 
  * Helper function that takes in generated hash and creates a folder for the specific Puzzle
  * based on the hash provided.
+ *  @params
+ *   hash: hash of the image that was just uploaded
+ *   filename: path of the image that was just uploaded
  */
-function moveFileHashedRename(hash, oldFilename) {
-    
-    const dir = process.env.UPLOAD_DIR + '/' + hash + '/'; // folder directory with hash as name
+function moveFileHashedRename(hash, filename) {
+
+    // compute name of directory for the image with the given hash
+    const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
+
+    // if directory already exists, simply delete the upload's tmp file and return
     if (fs.existsSync(dir)) {
-	fs.unlink(oldFilename, noop); // do nothing if the hash already exists
+	fs.unlink(filename, noop); 
 	return;
     }
-    fs.mkdirSync(dir); // creates a new folder with hash as folder name
+
+    // creates the directory 
+    fs.mkdirSync(dir); 
     
     // copy from tmp folder to appropriate folder and delete old file
     const newFilename = dir + "photo.jpg";
-    moveFile(oldFilename, newFilename);
-    fs.unlink(oldFilename, noop); 
-    
-    processImage(newFilename, hash); // calls processImage to send image to solver
+    moveFile(filename, newFilename);
+    fs.unlink(filename, noop); 
+
+    // send image to image processor module
+    processImage(newFilename, hash); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
