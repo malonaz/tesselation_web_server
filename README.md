@@ -8,6 +8,15 @@ After cloning the repository, you need to install the dependencies described in 
     
 Whenever `package.json` gets modified, you should run `npm i` to install new dependencies or update existing ones.
 
+# Configuring the Server Environment
+
+Make a copy of of `sample.env` and rename it to `.env` ; this is a file containing Server Environment directory used by the scripts.
+
+At the same file directory level as '/aps-app' and '/web' :
+
+    $ mkdir storage //serves as storage directory
+    
+
 # Running Web App
 
 To run the web app, run the command:
