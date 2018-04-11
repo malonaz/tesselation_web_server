@@ -56,31 +56,16 @@ function sendToImageProcessor(filename, hash) {
  *    target: path of file to be copied
  *    destination: path we want to copy the file to
  */
-function moveFile2(target, destination) {
-
-    // attempt to read the file and copy it to destination
-    fs.readFile(target, function(err, data) {
-      if (err) throw err;
-      fs.writeFile(destination, data, noop);
-    });
-
-    // delete original file
-    fs.unlink(target, noop);
-}
 
 function moveFile(target, destination) {
-
-    var readStream = fs.createReadStream(target);
-    var writeStream = fs.createWriteStream(destination);
-
-    readStream.on("close", function() {
-      fs.unlink(target, noop);
-    });
-
-    readStream.pipe(writeStream);
-
+  fs.rename(target, destination, function (err) {
+    if (err) {
+      console.log(err);
+    }
+  // delete original file
+  fs.unlink(target, noop);
+  });
 }
-
 
 /**
  * Helper function that takes in generated hash and creates a folder for the specific Puzzle
