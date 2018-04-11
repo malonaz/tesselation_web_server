@@ -37,11 +37,13 @@ function processImage(file, hash) {
 function moveFileHashedRename(hash, oldFilename) {
   const newFilename = 'photo.jpg'; //puzzle picture name is photo - so creative
   const dir = process.env.UPLOAD_DIR + '/' + hash + '/'; // folder directory with hash as name
+  const sol_dir = process.env.UPLOAD_DIR + '/' + hash + '/solutions/'; // folder directory with hash as name
   if (fs.existsSync(dir)) {
     fs.unlink(oldFilename, noop); // do nothing if the hash already exists
     return;
   }
   fs.mkdirSync(dir); // creates a new folder with hash as folder name
+  fs.mkdirSync(sol_dir); // creates a new folder with hash as folder name
   const newDir = dir + newFilename; // new directory
   fs.rename(oldFilename, newDir, noop); //renames to the very creative name of photo
   processImage(newDir, hash); // calls processImage to send image to solver
