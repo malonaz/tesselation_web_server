@@ -99,25 +99,8 @@ function processImage(hash, filename) {
     sendToImageProcessor(newFilename, hash); 
 }
 
-/////////////////////////////////// MAIN ////////////////////////////////////////////
-
-// configure muster for storage of uploaded files on disk
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-	// store uploaded files into user os' temporary directory
-	callback(null, os.tmpdir()); 
-    },
-    filename: (req, file, callback) => {
-	// sanitize the name of uploaded file by randomizing it
-	let buf = crypto.randomBytes(32); 
-	let name = buf.toString('hex');
-	callback(null, name + '.jpg');
-    }
-});
-
-
 /**
- * Function that checks the mimetype of the file uploaded 
+ * Helper function that checks the mimetype of a file uploaded, ensuring it a jpeg file
  *   @params
  *    req: http request
  *    file: file uploaded through POST request
@@ -134,6 +117,24 @@ function filterFile(req, file, callback) {
     // pass no error and true to the callback function
     callback(null, true);
 }
+
+
+/////////////////////////////////// MAIN ////////////////////////////////////////////
+
+// configure muster for storage of uploaded files on disk
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+	// store uploaded files into user os' temporary directory
+	callback(null, os.tmpdir()); 
+    },
+    filename: (req, file, callback) => {
+	// sanitize the name of uploaded file by randomizing it
+	let buf = crypto.randomBytes(32); 
+	let name = buf.toString('hex');
+	callback(null, name + '.jpg');
+    }
+});
+
 
 
 /* configuration for upload: single file upload, storage and filter */
