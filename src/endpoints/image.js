@@ -72,7 +72,7 @@ function moveFile(target, destination) {
  *   hash: hash of the image that was just uploaded
  *   filename: path of the image that was just uploaded
  */
-function moveFileHashedRename(hash, filename) {
+function processImage(hash, filename) {
 
     // compute name of directory for the image with the given hash
     const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
@@ -138,7 +138,7 @@ router.post('/upload', (req, res, next) => {
     const file = os.tmpdir() + '/' + req.file.filename;
     hashFile(file) // exciting part of hashing the contents of the image to use as unique id
       .then((hash) => { //async process; waits for the hashing to be completed before sending hash to next process
-        moveFileHashedRename(hash, file); // read the function description >.<
+        processImage(hash, file); // read the function description >.<
         res.json({
           hash: hash //returns hash as json
         });
