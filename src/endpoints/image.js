@@ -57,10 +57,14 @@ function sendToImageProcessor(filename, hash) {
  *    destination: path we want to copy the file to
  */
 function moveFile(target, destination) {
+
+    // attempt to read the file and copy it to destination
     fs.readFile(target, function(err, data) {
 	if (err) throw err;
 	fs.writeFile(destination, data, noop);
     });
+
+    // delete original file
     fs.unlink(target, noop);
 }
 
