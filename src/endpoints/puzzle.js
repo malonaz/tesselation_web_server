@@ -5,10 +5,17 @@ const Promise = require('bluebird');
 
 module.exports = router;
 
-/* function that reads the pieces file from the folder
-    (potential problem)
-*/
+////////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
+
+/* Helper function that reads the pieces from a file
+ *  @params
+ *   filename: path of file containing the pieces
+ * (potential problem)
+ *  @returns
+ *   a promise to resolve the data of the pieces file.
+ */
 function readPieces(filename) {
+    
   return new Promise((resolve) => {
     fs.readFile(filename, 'utf8', (err, data) => {
       if (err) {
