@@ -51,7 +51,7 @@ function sendToImageProcessor(filename, hash) {
 
 
 /**
- * Helper function which copies target to destination, then deletes target.
+ * Helper function which copies target to destination, then deletes target
  *   @params
  *    target: path of file to be copied
  *    destination: path we want to copy the file to
@@ -99,21 +99,26 @@ function processImage(hash, filename) {
     sendToImageProcessor(newFilename, hash); 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// MAIN ////////////////////////////////////////////
 
-/* multer to configure the storage of file on disk */
+// configure muster for storage of uploaded files on disk
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, os.tmpdir()); // stores onto temporary directory
-  },
-  filename: (req, file, cb) => { // sanitize the name of uploaded file
-    let buf = crypto.randomBytes(32); // temporary filename
-    let name = buf.toString('hex');
-    cb(null, name + '.jpg');
-  }
+    destination: (req, file, cb) => {
+	// store uploaded files into user os' temporary directory
+	cb(null, os.tmpdir()); 
+    },
+    filename: (req, file, cb) => {
+	// sanitize the name of uploaded file by randomizing it
+	let buf = crypto.randomBytes(32); 
+	let name = buf.toString('hex');
+	cb(null, name + '.jpg');
+    }
 });
 
-/* function that checks the mimetype of the file uploaded */
+
+/**
+ * Function that checks the mimetype of the file uploaded 
+ */
 function fileFilter(req, file, cb) {
   if (file.mimetype !== 'image/jpeg') { // only accepts jpeg file
     cb(new Error('File Upload Error'), false);
