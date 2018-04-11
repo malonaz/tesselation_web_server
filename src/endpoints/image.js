@@ -30,7 +30,7 @@ const logError = function(err){
  *    hash: hash of the image
  */
 function sendToImageProcessor(filename, hash) {
-    
+
     // create upload directory
     const uploadDir = process.env.UPLOAD_DIR + '/' + hash;
     fs.writeFile(uploadDir + '/processing', '', logError);
@@ -43,9 +43,9 @@ function sendToImageProcessor(filename, hash) {
 
     // start child process
     childProcess.exec(command, (error, stdout, stderr) => {
-	console.log(error);
-	console.log(stderr);
-	console.log(stdout);
+      console.log(error);
+      console.log(stderr);
+      console.log(stdout);
     });
 }
 
@@ -60,8 +60,8 @@ function moveFile(target, destination) {
 
     // attempt to read the file and copy it to destination
     fs.readFile(target, function(err, data) {
-	if (err) throw err;
-	fs.writeFile(destination, data, noop);
+      if (err) throw err;
+      fs.writeFile(destination, data, noop);
     });
 
     // delete original file
@@ -69,7 +69,7 @@ function moveFile(target, destination) {
 }
 
 
-/** 
+/**
  * Helper function that takes in generated hash and creates a folder for the specific Puzzle
  * based on the hash provided.
  *  @params
@@ -81,22 +81,26 @@ function processImage(hash, filename) {
     // compute name of directory for the image with the given hash
     const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
 
+    const sol_dir = process.env.UPLOAD_DIR + '/' + hash + '/solutions/';
+
     // if directory already exists, simply delete the upload's tmp file and return
     if (fs.existsSync(dir)) {
-	fs.unlink(filename, noop); 
-	return;
+      fs.unlink(filename, noop);
+      return;
     }
 
-    // creates the directory 
-    fs.mkdirSync(dir); 
-    
+    // creates the directory
+    fs.mkdirSync(dir);
+    // creates the directory
+    fs.mkdirSync(sol_dir);
+
     // copy from tmp folder to appropriate folder and delete old file
     const newFilename = dir + "photo.jpg";
     moveFile(filename, newFilename);
-    fs.unlink(filename, noop); 
+    fs.unlink(filename, noop);
 
     // send image to image processor module
-    sendToImageProcessor(newFilename, hash); 
+    sendToImageProcessor(newFilename, hash);
 }
 
 /**
@@ -107,12 +111,12 @@ function processImage(hash, filename) {
  *    callback: callback function
  */
 function fileFilter(req, file, callback) {
-    
-    // if file is not jpeg, pass a new error and false to the callback function
-    if (file.mimetype !== 'image/jpeg') { 
-	callback(new Error('File Upload Error'), false);
-	return;
-    }
+
+  // if file is not jpeg, pass a new error and false to the callback function
+  if (file.mimetype !== 'image/jpeg') {
+    callback(new Error('File Upload Error'), false);
+    return;
+  }
 
     // pass no error and true to the callback function
     callback(null, true);
@@ -124,15 +128,15 @@ function fileFilter(req, file, callback) {
 // configure muster for storage of uploaded files on disk
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-	// store uploaded files into user os' temporary directory
-	callback(null, os.tmpdir()); 
-    },
-    filename: (req, file, callback) => {
-	// sanitize the name of uploaded file by randomizing it
-	let buf = crypto.randomBytes(32); 
-	let name = buf.toString('hex');
-	callback(null, name + '.jpg');
-    }
+      // store uploaded files into user os' temporary directory
+    callback(null, os.tmpdir());
+  },
+  filename: (req, file, callback) => {
+    // sanitize the name of uploaded file by randomizing it
+    let buf = crypto.randomBytes(32);
+    let name = buf.toString('hex');
+    callback(null, name + '.jpg');
+  }
 });
 
 
@@ -151,30 +155,27 @@ const upload = multer({ storage: storage, fileFilter: fileFilter }).single('puzz
  */
 router.post('/upload', (req, res, next) => {
   upload(req, res, (err) => {
-      if (err) {
-	  next(err);
-	  return;
-      }
-      
+    if (err) {
+      next(err);
+      return;
+    }
+
       // error handling for file upload issues
-      if (!req.file) {
-	  next(new Error('File Upload Error'));
-	  return;
-      }
-      
-      // stores file on the temp dir with temp name as configured
-      // compute filename that we will save the uploaded file, in the user os' tmp folder
-      const file = os.tmpdir() + '/' + req.file.filename;
+    if (!req.file) {
+      next(new Error('File Upload Error'));
+      return;
+    }
 
-      // hash the file. async process so we wait until hashing is completed before proceeded to next step
-      hashFile(file).then((hash) => {
-	  // process image
-          processImage(hash, file);
+    // stores file on the temp dir with temp name as configured
+    // compute filename that we will save the uploaded file, in the user os' tmp folder
+    const file = os.tmpdir() + '/' + req.file.filename;
 
-	  // return hash as JSON
-          res.json({
-              hash: hash 
-          });
-      });
+    // hash the file. async process so we wait until hashing is completed before proceeded to next step
+    hashFile(file).then((hash) => {
+    // process image
+    processImage(hash, file);
+    // return hash as JSON
+    res.json({hash: hash });
+    });
   });
 });
