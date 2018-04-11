@@ -29,7 +29,7 @@ function readPieces(filename) {
 /////////////////////////////////// MAIN ////////////////////////////////////////////
 
 /**
- * handle /check endpoint
+ * /check endpoint
  *  - checks if the /processing flag is still in the folder i.e. identifying pieces
  *  - if processing flag is not in folder && pieces file exits -> returns pieces data
  */
@@ -54,8 +54,8 @@ router.post('/check', (req, res, next) => {
     }
     
     // checks if processing flag exists
-    let processing_flag = puzzleDir + '/processing';
-    if (fs.existsSync(test)) {
+    let processingFlag = puzzleDir + '/processing';
+    if (fs.existsSync(processingFlag)) {
 	res.json({ processing: true });
 	return;
     }
@@ -71,36 +71,50 @@ router.post('/check', (req, res, next) => {
 	});
 });
 
-/*  /solution endpoint for request of a solution
-    executes solver search for a compatible soultion.
-    1) POST request will contain a 1D array of the current state of the board
-    2) execute a call to solver to search for a compatible solution
-    3) returns the solution based on stdout of solver program
-*/
+
+/**
+ * /solution endpoint
+ * Executes solver search for a solution
+ *   @requires
+ *    POST request must contain a 1D array of the current puzzle state 
+ *   @returns
+ *    returns the solution based of solver program's stdout
+ */
 router.post('/solution', (req, res, next) => {
-  const executable = process.env.PARTIAL_SOLVER_PATH; // configure solver search exec on .env
-  const hash = req.body.hash; // hash retrieved from body of POST
-  //checks if input is a hash
-  if (!/^[0-9A-F]+$/i.test(hash)) {
-    next(new Error('Puzzle not found'));
-    return;
-  }
 
-  const state = req.body.state; //state retrieved from body of POST
-  // check if input of state is valid
-  if (!/^[\d\s]+$/i.test(state)) {
-    next(new Error('Input Error'));
-    return;
-  }
+    // get path to partial solver exec
+    const executable = process.env.PARTIAL_SOLVER_PATH;
 
-  //prepare cmd for solver exec call
-  const flag = 1;
-  const storage = process.env.UPLOAD_DIR + '/' + hash;
-  let command = '"' + executable + '" "' + storage + '" "' + state + '" "' + flag + '"';
-  childProcess.exec(command, (error, stdout, stderr) => {
-    console.log(error);
-    console.log(stderr);
-    console.log(stdout);
-    res.json({ solution: stdout }); //stdout of solver is the solution
-  });
+    // get hash from POST request's body
+    const hash = req.body.hash;
+    
+    // make sure hash is valid
+    if (!/^[0-9A-F]+$/i.test(hash)) {
+	next(new Error('Puzzle not found'));
+	return;
+    }
+
+    // get puzzle state from POST request's body
+    const puzzleState = req.body.state;
+    
+    // check if state is valid
+    if (!/^[\d\s]+$/i.test(puzzleState)) {
+	next(new Error('Input Error'));
+	return;
+    }
+
+    // setup the command we will pass to a child process
+    const flag = 1;
+    const storage = process.env.UPLOAD_DIR + '/' + hash;
+    let command = '"' + executable + '" "' + storage + '" "' + puzzleState + '" "' + flag + '"';
+
+    // start child proces
+    childProcess.exec(command, (error, stdout, stderr) => {
+	console.log(error);
+	console.log(stderr);
+	console.log(stdout);
+
+	// return solver's stdout in JSON
+	res.json({ solution: stdout }); 
+    });
 });
