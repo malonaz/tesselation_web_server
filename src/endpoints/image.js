@@ -9,7 +9,7 @@ const noop = () => {};
 
 module.exports = router;
 
-////////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
+////////////////////////////// HELPER FUNCTIONS ////////////////////////////////
 
 /**
  * Helper function which logs a given error to the console.
@@ -121,7 +121,7 @@ function fileFilter(req, file, callback) {
 }
 
 
-/////////////////////////////////// MAIN ////////////////////////////////////////////
+/////////////////////////////////// MAIN ///////////////////////////////////////
 
 // configure muster for storage of uploaded files on disk
 const storage = multer.diskStorage({
@@ -173,7 +173,7 @@ router.post('/upload', (req, res, next) => {
     // process image
     processImage(hash, file);
     // return hash as JSON
-    res.json({hash: hash });
+    res.json({ hash: hash });
     });
   });
 });
