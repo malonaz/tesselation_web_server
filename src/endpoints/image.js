@@ -123,7 +123,7 @@ const storage = multer.diskStorage({
  *    file: file uploaded through POST request
  *    callback: callback function
  */
-function fileFilter(req, file, callback) {
+function filterFile(req, file, callback) {
     
     // if file is not jpeg, pass a new error and false to the callback function
     if (file.mimetype !== 'image/jpeg') { 
@@ -137,7 +137,7 @@ function fileFilter(req, file, callback) {
 
 
 /* configuration for upload: single file upload, storage and filter */
-const upload = multer({ storage: storage, fileFilter: fileFilter })
+const upload = multer({ storage: storage, filterFile: filterFile })
   .single('puzzle');
 
 /* handling the upload on /upload */
