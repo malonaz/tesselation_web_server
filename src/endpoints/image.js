@@ -9,26 +9,42 @@ const noop = () => {};
 
 module.exports = router;
 
-//////////////////////////// aux functions ////////////////////////////////////
-/* function that processeses the image file uploaded
-  inputs: file directory of the image and hash
-  1) takes in the hash of the image file to set up the upload directory for processing flag
-  2) calls the solver executable; provides image directory and upload directory
-*/
-function processImage(file, hash) {
-  const executable = process.env.IMAGE_PROCESSOR_PATH;
-  const uploadDir = process.env.UPLOAD_DIR + '/' + hash;
-  fs.writeFile(uploadDir + '/processing', '', (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  let command = '"' + executable + '" "' + file + '" "' + uploadDir + '"'; //prepared cmd for the shell execution
-  childProcess.exec(command, (error, stdout, stderr) => {
-    console.log(error);
-    console.log(stderr);
-    console.log(stdout);
-  });
+//////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
+
+/**
+ * Helper function which logs a given error to the console.
+ */
+const logError = function(err){
+    if (err)
+	console.log(err);
+};
+
+
+/**
+ * Helper function that sends the given image file to our image processor executable
+ * using a child process.
+ *   @params
+ *    filename: filepath of image to be processed
+ *    hash: hash of the image
+ */
+function processImage(filename, hash) {
+    
+    // create upload directory
+    const uploadDir = process.env.UPLOAD_DIR + '/' + hash;
+    fs.writeFile(uploadDir + '/processing', '', logError);
+
+    // get path to image processor
+    const executable = process.env.IMAGE_PROCESSOR_PATH;
+
+    // setup the command we will pass to a child process
+    let command = '"' + executable + '" "' + filename + '" "' + uploadDir + '"';
+
+    // start child process
+    childProcess.exec(command, (error, stdout, stderr) => {
+	console.log(error);
+	console.log(stderr);
+	console.log(stdout);
+    });
 }
 
 
