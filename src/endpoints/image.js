@@ -74,7 +74,7 @@ function moveFile(target, destination) {
     var writeStream = fs.createWriteStream(destination);
 
     readStream.on("close", function() {
-	fs.unlink(target, noop);
+      fs.unlink(target, noop);
     });
 
     readStream.pipe(writeStream);
