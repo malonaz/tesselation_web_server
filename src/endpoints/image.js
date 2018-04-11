@@ -31,22 +31,39 @@ function processImage(file, hash) {
   });
 }
 
-/* function that takes in generated hash and creates a folder for the specific Puzzle
-  based on the hash provided.
-*/
+
+/**
+ * Helper function which copies target to destination, then deletes target.
+ */
+function moveFile(target, destination) {
+    fs.readFile(target, function(err, data) {
+	if (err) throw err;
+	fs.writeFile(destination, data, noop);
+    });
+    fs.unlink(target, noop);
+}
+
+
+
+/** 
+ * function that takes in generated hash and creates a folder for the specific Puzzle
+ * based on the hash provided.
+ */
 function moveFileHashedRename(hash, oldFilename) {
-  const newFilename = 'photo.jpg'; //puzzle picture name is photo - so creative
-  const dir = process.env.UPLOAD_DIR + '/' + hash + '/'; // folder directory with hash as name
-  const sol_dir = process.env.UPLOAD_DIR + '/' + hash + '/solutions/'; // folder directory with hash as name
-  if (fs.existsSync(dir)) {
-    fs.unlink(oldFilename, noop); // do nothing if the hash already exists
-    return;
-  }
-  fs.mkdirSync(dir); // creates a new folder with hash as folder name
-  fs.mkdirSync(sol_dir); // creates a new folder with hash as folder name
-  const newDir = dir + newFilename; // new directory
-  fs.rename(oldFilename, newDir, noop); //renames to the very creative name of photo
-  processImage(newDir, hash); // calls processImage to send image to solver
+    
+    const dir = process.env.UPLOAD_DIR + '/' + hash + '/'; // folder directory with hash as name
+    if (fs.existsSync(dir)) {
+	fs.unlink(oldFilename, noop); // do nothing if the hash already exists
+	return;
+    }
+    fs.mkdirSync(dir); // creates a new folder with hash as folder name
+    
+    // copy from tmp folder to appropriate folder and delete old file
+    const newFilename = dir + "photo.jpg";
+    moveFile(oldFilename, newFilename);
+    fs.unlink(oldFilename, noop); 
+    
+    processImage(newFilename, hash); // calls processImage to send image to solver
 }
 
 ///////////////////////////////////////////////////////////////////////////////
