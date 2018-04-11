@@ -13,6 +13,8 @@ module.exports = router;
 
 /**
  * Helper function which logs a given error to the console.
+ *   @params
+ *    err: error to be logged
  */
 const logError = function(err){
     if (err)
@@ -50,6 +52,9 @@ function processImage(filename, hash) {
 
 /**
  * Helper function which copies target to destination, then deletes target.
+ *   @params
+ *    target: path of file to be copied
+ *    destination: path we want to copy the file to
  */
 function moveFile(target, destination) {
     fs.readFile(target, function(err, data) {
@@ -60,9 +65,8 @@ function moveFile(target, destination) {
 }
 
 
-
 /** 
- * function that takes in generated hash and creates a folder for the specific Puzzle
+ * Helper function that takes in generated hash and creates a folder for the specific Puzzle
  * based on the hash provided.
  */
 function moveFileHashedRename(hash, oldFilename) {
