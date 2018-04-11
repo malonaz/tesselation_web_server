@@ -26,39 +26,49 @@ function readPieces(filename) {
   });
 }
 
-/* /check endpoint
-  checks if the /processing flag is still in the folder i.e. identifying pieces
-  if processing flag is not in folder && pieces file exits -> returns pieces data
-*/
-router.post('/check', (req, res, next) => {
-  const hash = req.body.hash;
-  // test if input provided is a hash
-  if (!/^[0-9A-F]+$/i.test(hash)) {
-    next(new Error('Puzzle not found'));
-    return;
-  }
-  // checks whether puzzle exists from hash provided
-  let file = process.env.UPLOAD_DIR + '/' + hash;
-  if (!fs.existsSync(file)) {
-    next(new Error('Puzzle not found'));
-    return;
-  }
-  // checks if /processing flag exists
-  let test = file + '/processing';
-  if (fs.existsSync(test)) {
-    res.json({ processing: true });
-    return;
-  }
+/////////////////////////////////// MAIN ////////////////////////////////////////////
 
-  let piecesFile = file + '/pieces';
-  // read pieces from file and returns the data
-  readPieces(piecesFile)
-    .then((data) => {
-      res.json({
-        processing: false,
-        pieces: data
-      });
-    });
+/**
+ * handle /check endpoint
+ *  - checks if the /processing flag is still in the folder i.e. identifying pieces
+ *  - if processing flag is not in folder && pieces file exits -> returns pieces data
+ */
+router.post('/check', (req, res, next) => {
+
+    // get hash from the request
+    const hash = req.body.hash;
+    
+    // make sure the request's hash is valid
+    if (!/^[0-9A-F]+$/i.test(hash)) {
+	next(new Error('Puzzle not found'));
+	return;
+    }
+
+    // compute name of puzzle upload directory
+    let puzzleDir = process.env.UPLOAD_DIR + '/' + hash;
+ 
+    // make sure this puzzle's directory exists
+    if (!fs.existsSync(puzzleDir)) {
+	next(new Error('Puzzle not found'));
+	return;
+    }
+    
+    // checks if processing flag exists
+    let processing_flag = puzzleDir + '/processing';
+    if (fs.existsSync(test)) {
+	res.json({ processing: true });
+	return;
+    }
+
+    // read pieces from file and returns the data
+    let piecesFile = puzzleDir + '/pieces';
+    readPieces(piecesFile)
+	.then((data) => {
+	    res.json({
+		processing: false,
+		pieces: data
+	    });
+	});
 });
 
 /*  /solution endpoint for request of a solution
