@@ -139,7 +139,16 @@ const storage = multer.diskStorage({
 // configure upload to single file upload, storage and filter function
 const upload = multer({ storage: storage, fileFilter: fileFilter }).single('puzzle');
 
-// handle /upload endpoint
+
+/**
+ * /upload endpoint
+ * accepts an uploaded file, moves it to storage folder and sends it to image processor
+ * to get generate pieces file
+ *   @requires
+ *    file must be in jpeg format or else upload will fail
+ *   @returns
+ *    returns the hash of the upload image file as JSON
+ */
 router.post('/upload', (req, res, next) => {
   upload(req, res, (err) => {
       if (err) {
