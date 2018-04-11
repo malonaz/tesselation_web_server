@@ -103,29 +103,38 @@ function processImage(hash, filename) {
 
 // configure muster for storage of uploaded files on disk
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (req, file, callback) => {
 	// store uploaded files into user os' temporary directory
-	cb(null, os.tmpdir()); 
+	callback(null, os.tmpdir()); 
     },
-    filename: (req, file, cb) => {
+    filename: (req, file, callback) => {
 	// sanitize the name of uploaded file by randomizing it
 	let buf = crypto.randomBytes(32); 
 	let name = buf.toString('hex');
-	cb(null, name + '.jpg');
+	callback(null, name + '.jpg');
     }
 });
 
 
 /**
  * Function that checks the mimetype of the file uploaded 
+ *   @params
+ *    req: http request
+ *    file: file uploaded through POST request
+ *    callback: callback function
  */
-function fileFilter(req, file, cb) {
-  if (file.mimetype !== 'image/jpeg') { // only accepts jpeg file
-    cb(new Error('File Upload Error'), false);
-    return;
-  }
-  cb(null, true);
+function fileFilter(req, file, callback) {
+    
+    // if file is not jpeg, pass a new error and false to the callback function
+    if (file.mimetype !== 'image/jpeg') { 
+	callback(new Error('File Upload Error'), false);
+	return;
+    }
+
+    // pass no error and true to the callback function
+    callback(null, true);
 }
+
 
 /* configuration for upload: single file upload, storage and filter */
 const upload = multer({ storage: storage, fileFilter: fileFilter })
