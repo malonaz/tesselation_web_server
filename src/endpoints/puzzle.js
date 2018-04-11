@@ -30,14 +30,14 @@ function readPieces(filename) {
 
 /**
  * /check endpoint
- *  - checks if the /processing flag is still in the folder i.e. identifying pieces
- *  - if processing flag is not in folder && pieces file exits -> returns pieces data
+ *  checks if the /processing flag is still in the folder i.e. identifying pieces
+ *  if processing flag is not in folder && pieces file exits -> returns pieces data
  */
 router.post('/check', (req, res, next) => {
 
     // get hash from the request
     const hash = req.body.hash;
-    
+
     // make sure the request's hash is valid
     if (!/^[0-9A-F]+$/i.test(hash)) {
 	next(new Error('Puzzle not found'));
