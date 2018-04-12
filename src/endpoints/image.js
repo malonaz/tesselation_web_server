@@ -68,32 +68,32 @@ function moveFile(target, destination) {
 }
 
 /**
- * Helper function that takes in generated hash and creates a folder for the specific Puzzle
- * based on the hash provided.
+ * Helper function that sets up a puzzle for the given file, creating the necessary
+ * directories as well as process the image.
  *  @params
  *   hash: hash of the image that was just uploaded
  *   filename: path of the image that was just uploaded
  */
 function processImage(hash, filename) {
 
-    // compute name of directory for the image with the given hash
-    const dir = process.env.UPLOAD_DIR + '/' + hash + '/';
+    // compute name of directory for puzzle with the given hash
+    const puzzleDir = process.env.UPLOAD_DIR + '/' + hash + '/';
 
-    const sol_dir = process.env.UPLOAD_DIR + '/' + hash + '/solutions/';
+    // compute name of directory for this puzzle's solutions
+    const puzzleSolutionsDir = process.env.UPLOAD_DIR + '/' + hash + '/solutions/';
 
     // if directory already exists, simply delete the upload's tmp file and return
-    if (fs.existsSync(dir)) {
+    if (fs.existsSync(puzzleDir)) {
       fs.unlink(filename, noop);
       return;
     }
 
-    // creates the directory
-    fs.mkdirSync(dir);
-    // creates the directory
-    fs.mkdirSync(sol_dir);
+    // create the puzzle & puzzle solution directories
+    fs.mkdirSync(puzzleDir);
+    fs.mkdirSync(puzzleSolutionsDir);
 
-    // copy from tmp folder to appropriate folder and delete old file
-    const newFilename = dir + "photo.jpg";
+    // move from tmp folder to appropriate folder 
+    const newFilename = puzzleDir + "photo.jpg";
     moveFile(filename, newFilename);
 
     // send image to image processor module
