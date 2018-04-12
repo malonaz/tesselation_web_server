@@ -58,7 +58,7 @@ function sendToImageProcessor(filename, hash) {
  */
 
 function moveFile(target, destination) {
-  fs.rename(target, destination, function (err) {
+  fs.renameSync(target, destination, function (err) {
     if (err) {
       console.log(err);
     }
