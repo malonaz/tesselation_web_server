@@ -95,7 +95,6 @@ function processImage(hash, filename) {
     // copy from tmp folder to appropriate folder and delete old file
     const newFilename = dir + "photo.jpg";
     moveFile(filename, newFilename);
-    fs.unlink(filename, noop);
 
     // send image to image processor module
     sendToImageProcessor(newFilename, hash);
