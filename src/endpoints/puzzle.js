@@ -104,7 +104,7 @@ router.post('/solution', (req, res, next) => {
     }
 
     // setup the command we will pass to a child process
-    const flag = 1;
+    const flag = 0;
     const storage = process.env.UPLOAD_DIR + '/' + hash;
     let command = '"' + executable + '" "' + storage + '" "' + puzzleState + '" "' + flag + '"';
 
