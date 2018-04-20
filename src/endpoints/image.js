@@ -38,8 +38,11 @@ function sendToImageProcessor(filename, hash) {
     // get path to image processor
     const executable = process.env.IMAGE_PROCESSOR_PATH;
 
+    // get path to the solver binary
+    const solver_bin = process.env.PARTIAL_SOLVER_PATH;
+    
     // setup the command we will pass to a child process
-    let command = '"' + executable + '" "' + filename + '" "' + uploadDir + '"';
+    let command = '"' + executable + '" "' + filename + '" "' + uploadDir + '" "' + solver_bin + '"';
 
     // start child process
     childProcess.exec(command, (error, stdout, stderr) => {
