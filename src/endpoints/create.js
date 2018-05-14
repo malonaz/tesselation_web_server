@@ -76,28 +76,28 @@ function generatePuzzle(puzzleSize, callback){
     console.log(error);
     console.log(stderr);
     console.log(stdout);
-  });
 
-  let puzzlePiecesFile = '/home/tps/web/' +tempF + '/pieces';
-  let puzzleSolutionsFile = '/home/tps/web/' +tempF + '/first';
+    let puzzlePiecesFile = '/home/tps/web/' +tempF + '/pieces';
+    let puzzleSolutionsFile = '/home/tps/web/' +tempF + '/first';
 
-  console.log(puzzlePiecesFile);
-  console.log(puzzleSolutionsFile);
+    console.log(puzzlePiecesFile);
+    console.log(puzzleSolutionsFile);
 
-  if (!fs.existsSync(puzzlePiecesFile)){
-    console.log('pieces file not found!');
-    return;
-  }
+    if (!fs.existsSync(puzzlePiecesFile)){
+      console.log('pieces file not found!');
+      return;
+    }
 
-  hashFile(puzzlePiecesFile).then((hash) => {
-  // process puzzle - file management
-    console.log(hash);
-    processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
-    //delete temp file
-    fs.unlink(puzzlePiecesFile, noop);
-    fs.unlink(puzzleSolutionsFile, noop);
-    // returns generated hash
-    callback(hash);
+    hashFile(puzzlePiecesFile).then((hash) => {
+    // process puzzle - file management
+      console.log(hash);
+      processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
+      //delete temp file
+      fs.unlink(puzzlePiecesFile, noop);
+      fs.unlink(puzzleSolutionsFile, noop);
+      // returns generated hash
+      callback(hash);
+    });
   });
 }
 
