@@ -67,8 +67,8 @@ function generatePuzzle(puzzleSize, callback){
     console.log(stderr);
     console.log(stdout);
   });
-  let puzzlePiecesFile = './' + tempF + '/pieces';
-  let puzzleSolutionsFile = './' + tempF + '/first';
+  let puzzlePiecesFile = './web/' + tempF + '/pieces';
+  let puzzleSolutionsFile = './web/' + tempF + '/first';
 
   console.log(puzzlePiecesFile);
   console.log(puzzleSolutionsFile);
@@ -79,7 +79,8 @@ function generatePuzzle(puzzleSize, callback){
   });
 
   //delete temp file
-  fs.unlink(tempF, noop);
+  let tempdir = './web/' + tempF;
+  fs.unlink(tempdir, noop);
 
   console.log(hash);
 
