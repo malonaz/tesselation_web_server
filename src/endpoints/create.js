@@ -64,7 +64,7 @@ function generatePuzzle(puzzleSize, callback){
   let cmd = '"' + exec1 + '" "' + puzzleSize + '"';
   console.log(dir);
   console.log(cmd);
-  childProcess.exec(cmd, [dir], (error, stdout, stderr) => {
+  childProcess.exec(cmd, cwd dir, (error, stdout, stderr) => {
     console.log(error);
     console.log(stderr);
     console.log(stdout);
