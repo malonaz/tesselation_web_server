@@ -41,7 +41,7 @@ function processPuzzle(hash, pieces, solution) {
 
     // move from tmp folder to appropriate folder
     const newPieces = puzzleDir + "pieces";
-    const newSolution = puzzleDir + "first";
+    const newSolution = puzzleDir + "/solutions/first";
     console.log(newPieces);
     console.log(newSolution);
 
@@ -53,7 +53,7 @@ function processPuzzle(hash, pieces, solution) {
     moveFile(pieces, newPieces);
     moveFile(solution, newSolution);
 
-    console.log('proces puzzle completed');
+    console.log('process puzzle completed');
 }
 
 function generatePuzzle(puzzleSize, callback){
@@ -91,17 +91,14 @@ function generatePuzzle(puzzleSize, callback){
 
   hashFile(puzzlePiecesFile).then((hash) => {
   // process puzzle - file management
+  console.log(hash);
   processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
-  });
-
   //delete temp file
   fs.unlink(puzzlePiecesFile, noop);
   fs.unlink(puzzleSolutionsFile, noop);
-
-  console.log(hash);
-
   // returns generated hash
   callback(hash);
+  });
 }
 
 ///
