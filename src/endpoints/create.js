@@ -95,7 +95,8 @@ function generatePuzzle(puzzleSize, callback){
   });
 
   //delete temp file
-  fs.unlink(dir, noop);
+  fs.unlink(puzzlePiecesFile, noop);
+  fs.unlink(puzzleSolutionsFile, noop);
 
   console.log(hash);
 
