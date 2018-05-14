@@ -84,7 +84,10 @@ router.post('/', (req, res, next) => {
       return;
     }
 
-    generatePuzzle(puzzleSize, hash);
+    console.log('generate puzzle');
+    console.log(puzzleSize);
+
+    hash = generatePuzzle(puzzleSize);
 
     // compute name of puzzle upload directory
     let puzzleDir = process.env.UPLOAD_DIR + '/' + hash;
