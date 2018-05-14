@@ -65,12 +65,14 @@ function generatePuzzle(puzzleSize, callback){
 
   console.log(dir);
   console.log(cmd);
+
   childProcess.exec(cmd, { cwd: dir }, (error, stdout, stderr) => {
     console.log('exec pb');
     console.log(error);
     console.log(stderr);
     console.log(stdout);
   });
+
   let puzzlePiecesFile = './web/' + tempF + '/pieces';
   let puzzleSolutionsFile = './web/' + tempF + '/first';
 
