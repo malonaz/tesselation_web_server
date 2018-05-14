@@ -45,6 +45,11 @@ function processPuzzle(hash, pieces, solution) {
     console.log(newPieces);
     console.log(newSolution);
 
+    if (!fs.existsSync(pieces) && !fs.existsSync(solution)){
+      console.log('files not found...exit');
+      return;
+
+    }
     moveFile(pieces, newPieces);
     moveFile(solution, newSolution);
 
@@ -78,6 +83,11 @@ function generatePuzzle(puzzleSize, callback){
 
   console.log(puzzlePiecesFile);
   console.log(puzzleSolutionsFile);
+
+  if (!fs.existsSync(puzzlePiecesFile)){
+    console.log('pieces file not found!');
+    return;
+  }
 
   hashFile(puzzlePiecesFile).then((hash) => {
   // process puzzle - file management
@@ -114,6 +124,14 @@ router.post('/', (req, res, next) => {
     let puzzleDir = process.env.UPLOAD_DIR + '/' + hash;
 
     console.log(puzzleDir);
+
+    if (!fs.existsSync(puzzleDir)){
+      console.log('ERROR PUZZLE NOT FOUND');
+      res.json({
+        msg: "puzzle not found"
+      });
+      return;
+    }
 
     // read pieces from file and returns the data
     let piecesFile = puzzleDir + '/pieces';
