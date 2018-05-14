@@ -60,7 +60,7 @@ function generatePuzzle(puzzleSize, callback){
   console.log(tempF)
 
   const exec1 = process.env.GENERATOR_PATH;
-  let dir = './' + tempF;
+  let dir = './web/' + tempF;
   let cmd = '"' + exec1 + '" "' + puzzleSize + '"';
   childProcess.exec(cmd, [dir], (error, stdout, stderr) => {
     console.log(error);
@@ -79,8 +79,7 @@ function generatePuzzle(puzzleSize, callback){
   });
 
   //delete temp file
-  let tempdir = './web/' + tempF;
-  fs.unlink(tempdir, noop);
+  fs.unlink(dir, noop);
 
   console.log(hash);
 
