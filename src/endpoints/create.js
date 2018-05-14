@@ -21,6 +21,7 @@ function moveFile(target, destination) {
 }
 
 function processPuzzle(hash, pieces, solution) {
+    console.log('process puzzle');
 
     // compute name of directory for puzzle with the given hash
     const puzzleDir = process.env.UPLOAD_DIR + '/' + hash + '/';
@@ -41,14 +42,23 @@ function processPuzzle(hash, pieces, solution) {
     // move from tmp folder to appropriate folder
     const newPieces = puzzleDir + "pieces";
     const newSolution = puzzleDir + "first";
+    console.log(newPieces);
+    console.log(newSolution);
+
     moveFile(pieces, newPieces);
     moveFile(solution, newSolution);
+
+    console.log('proces puzzle completed');
 }
 
 function generatePuzzle(puzzleSize, callback){
+  console.log('generating puzzle...');
   let buf = crypto.randomBytes(32);
   let tempF = buf.toString('hex');
   fs.mkdirSync(tempF);
+
+  console.log(tempF)
+
   const exec1 = process.env.GENERATOR_PATH;
   let dir = './' + tempF;
   let cmd = '"' + exec1 + '" "' + puzzleSize + '"';
@@ -60,6 +70,9 @@ function generatePuzzle(puzzleSize, callback){
   let puzzlePiecesFile = './' + tempF + '/pieces';
   let puzzleSolutionsFile = './' + tempF + '/first';
 
+  console.log(puzzlePiecesFile);
+  console.log(puzzleSolutionsFile);
+
   hashFile(puzzlePiecesFile).then((hash) => {
   // process puzzle - file management
   processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
@@ -68,8 +81,10 @@ function generatePuzzle(puzzleSize, callback){
   //delete temp file
   fs.unlink(tempF, noop);
 
+  console.log(hash);
+
   // returns generated hash
-  callback(null, hash);
+  callback(hash);
 }
 
 ///
@@ -91,6 +106,8 @@ router.post('/', (req, res, next) => {
 
     // compute name of puzzle upload directory
     let puzzleDir = process.env.UPLOAD_DIR + '/' + hash;
+
+    console.log(puzzleDir);
 
     // read pieces from file and returns the data
     let piecesFile = puzzleDir + '/pieces';
