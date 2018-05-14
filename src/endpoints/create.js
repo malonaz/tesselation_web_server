@@ -34,7 +34,7 @@ function moveFile(target, destination) {
 }
 
 function processPuzzle(hash, pieces, solution, tempDir) {
-    console.log('process puzzle');
+    //console.log('process puzzle');
 
     // compute name of directory for puzzle with the given hash
     const puzzleDir = process.env.UPLOAD_DIR + '/' + hash + '/';
@@ -66,11 +66,12 @@ function processPuzzle(hash, pieces, solution, tempDir) {
     //delete temp folder and its comments
     rimraf(tempDir, function () { console.log('deleted ' + tempDir);});
 
-    console.log('process puzzle completed');
+    //console.log('process puzzle completed');
 }
 
 function generatePuzzle(puzzleSize, callback){
-  console.log('generating puzzle...');
+  //console.log('generating puzzle...');
+
   // creates a temp folder to create execute the random generator
   let buf = crypto.randomBytes(32);
   let tempF = buf.toString('hex');
@@ -81,11 +82,11 @@ function generatePuzzle(puzzleSize, callback){
   let dir = process.env.WEB_PATH + '/' + tempF;
   let cmd =  exec1 + ' ' + puzzleSize;
 
-  console.log(dir);
-  console.log(cmd);
+  //console.log(dir);
+  //console.log(cmd);
 
   childProcess.exec(cmd, { cwd:dir }, (error, stdout, stderr) => {
-    console.log('executing puzzle generator');
+    //console.log('executing puzzle generator');
     console.log(error);
     console.log(stderr);
     console.log(stdout);
@@ -93,8 +94,8 @@ function generatePuzzle(puzzleSize, callback){
     let puzzlePiecesFile = process.env.WEB_PATH + '/' + tempF + '/pieces';
     let puzzleSolutionsFile = process.env.WEB_PATH + '/' + tempF + '/first';
 
-    console.log(puzzlePiecesFile);
-    console.log(puzzleSolutionsFile);
+    //console.log(puzzlePiecesFile);
+    //console.log(puzzleSolutionsFile);
 
     if (!fs.existsSync(puzzlePiecesFile)){
       console.log('pieces file not found!');
@@ -108,7 +109,7 @@ function generatePuzzle(puzzleSize, callback){
 
     hashFile(puzzlePiecesFile).then((hash) => {
       // process puzzle - file management
-      console.log(hash);
+      //console.log(hash);
       processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile, dir);
       // returns generated hash
       callback(hash);
@@ -128,15 +129,15 @@ router.post('/', (req, res, next) => {
       return;
     }
 
-    console.log('generate puzzle');
-    console.log(puzzleSize);
+    //console.log('generate puzzle');
+    //console.log(puzzleSize);
 
     generatePuzzle(puzzleSize, (hash) => {
 
       // compute name of puzzle upload directory
       let puzzleDir = process.env.UPLOAD_DIR + '/' + hash;
 
-      console.log(puzzleDir);
+      console.log('manual puzzle at ' +puzzleDir);
 
       if (!fs.existsSync(puzzleDir)){
         console.log('ERROR PUZZLE NOT FOUND');
