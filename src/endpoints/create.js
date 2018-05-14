@@ -5,7 +5,7 @@ const os = require('os');
 const childProcess = require('child_process');
 const crypto = require('crypto');
 const hashFile = require('./../lib/hashFile');
-var rimraf = require('rimraf');
+const rimraf = require('rimraf');
 const noop = () => {};
 const Promise = require('bluebird');
 
