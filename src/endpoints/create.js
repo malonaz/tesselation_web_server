@@ -41,7 +41,7 @@ function processPuzzle(hash, pieces, solution) {
 
     // move from tmp folder to appropriate folder
     const newPieces = puzzleDir + "pieces";
-    const newSolution = puzzleDir + "/solutions/first";
+    const newSolution = puzzleSolutionsDir + "first";
     console.log(newPieces);
     console.log(newSolution);
 
@@ -58,28 +58,28 @@ function processPuzzle(hash, pieces, solution) {
 
 function generatePuzzle(puzzleSize, callback){
   console.log('generating puzzle...');
-  // let buf = crypto.randomBytes(32);
-  // let tempF = buf.toString('hex');
-  // fs.mkdirSync(tempF);
+  let buf = crypto.randomBytes(32);
+  let tempF = buf.toString('hex');
+  fs.mkdirSync(tempF);
 
-  // console.log(tempF)
+  console.log(tempF)
 
   const exec1 = process.env.GENERATOR_PATH;
-  // let dir = './web/' + tempF;
+  let dir = '/home/tps/web/' + tempF;
   let cmd =  exec1 + ' ' + puzzleSize;
 
-  // console.log(dir);
+  console.log(dir);
   console.log(cmd);
 
-  childProcess.exec(cmd, (error, stdout, stderr) => {
+  childProcess.exec(cmd,{ cwd:dir } (error, stdout, stderr) => {
     console.log('exec pb');
     console.log(error);
     console.log(stderr);
     console.log(stdout);
   });
 
-  let puzzlePiecesFile = '/home/tps/web/pieces';
-  let puzzleSolutionsFile = '/home/tps/web/first';
+  let puzzlePiecesFile = '/home/tps/web/' +tempF + '/pieces';
+  let puzzleSolutionsFile = '/home/tps/web/' +tempF + '/first';
 
   console.log(puzzlePiecesFile);
   console.log(puzzleSolutionsFile);
@@ -91,14 +91,14 @@ function generatePuzzle(puzzleSize, callback){
 
   hashFile(puzzlePiecesFile).then((hash) => {
   // process puzzle - file management
-  console.log(hash);
-  processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
+    console.log(hash);
+    processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
+    //delete temp file
+    fs.unlink(puzzlePiecesFile, noop);
+    fs.unlink(puzzleSolutionsFile, noop);
+    // returns generated hash
+    callback(hash);
   });
-  //delete temp file
-  fs.unlink(puzzlePiecesFile, noop);
-  fs.unlink(puzzleSolutionsFile, noop);
-  // returns generated hash
-  callback(hash);
 }
 
 ///
