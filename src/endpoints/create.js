@@ -41,9 +41,8 @@ function processPuzzle(hash, pieces, solution) {
     // compute name of directory for this puzzle's solutions
     const puzzleSolutionsDir = process.env.UPLOAD_DIR + '/' + hash + '/solutions/';
 
-    // if directory already exists, simply delete the upload's tmp file and return
+    // if directory already exists, simply return
     if (fs.existsSync(puzzleDir)) {
-      fs.unlink(filename, noop);
       return;
     }
 
@@ -51,11 +50,9 @@ function processPuzzle(hash, pieces, solution) {
     fs.mkdirSync(puzzleDir);
     fs.mkdirSync(puzzleSolutionsDir);
 
-    // move from tmp folder to appropriate folder
+    // set up new file directories for pieces and first solution
     const newPieces = puzzleDir + "pieces";
     const newSolution = puzzleSolutionsDir + "first";
-    console.log(newPieces);
-    console.log(newSolution);
 
     if (!fs.existsSync(pieces) && !fs.existsSync(solution)){
       console.log('files not found...exit');
@@ -70,27 +67,27 @@ function processPuzzle(hash, pieces, solution) {
 
 function generatePuzzle(puzzleSize, callback){
   console.log('generating puzzle...');
+  // creates a temp folder to create execute the random generator
   let buf = crypto.randomBytes(32);
   let tempF = buf.toString('hex');
-  fs.mkdirSync(tempF);
 
-  console.log(tempF)
+  fs.mkdirSync(tempF); // created in /home/tps/web i.e. process.env.WEB_PATH
 
   const exec1 = process.env.GENERATOR_PATH;
-  let dir = '/home/tps/web/' + tempF;
+  let dir = process.env.WEB_PATH + '/' + tempF;
   let cmd =  exec1 + ' ' + puzzleSize;
 
   console.log(dir);
   console.log(cmd);
 
   childProcess.exec(cmd, { cwd:dir }, (error, stdout, stderr) => {
-    console.log('exec pb');
+    console.log('executing puzzle generator');
     console.log(error);
     console.log(stderr);
     console.log(stdout);
 
-    let puzzlePiecesFile = '/home/tps/web/' +tempF + '/pieces';
-    let puzzleSolutionsFile = '/home/tps/web/' +tempF + '/first';
+    let puzzlePiecesFile = process.env.WEB_PATH + '/' + tempF + '/pieces';
+    let puzzleSolutionsFile = process.env.WEB_PATH + '/' + tempF + '/first';
 
     console.log(puzzlePiecesFile);
     console.log(puzzleSolutionsFile);
@@ -100,20 +97,25 @@ function generatePuzzle(puzzleSize, callback){
       return;
     }
 
+    if (!fs.existsSync(puzzleSolutionsFile)){
+      console.log('solutions file not found!');
+      return;
+    }
+
     hashFile(puzzlePiecesFile).then((hash) => {
       // process puzzle - file management
       console.log(hash);
       processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
-      //delete temp file
-      fs.unlink(puzzlePiecesFile, noop);
-      fs.unlink(puzzleSolutionsFile, noop);
+
+      //delete temp folder and its comments
+      fs.unlink(dir, noop);
       // returns generated hash
       callback(hash);
     });
   });
 }
 
-///
+/// MAIN ///
 router.post('/', (req, res, next) => {
 
     // get size from the request
