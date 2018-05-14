@@ -58,28 +58,28 @@ function processPuzzle(hash, pieces, solution) {
 
 function generatePuzzle(puzzleSize, callback){
   console.log('generating puzzle...');
-  let buf = crypto.randomBytes(32);
-  let tempF = buf.toString('hex');
-  fs.mkdirSync(tempF);
+  // let buf = crypto.randomBytes(32);
+  // let tempF = buf.toString('hex');
+  // fs.mkdirSync(tempF);
 
-  console.log(tempF)
+  // console.log(tempF)
 
   const exec1 = process.env.GENERATOR_PATH;
-  let dir = './web/' + tempF;
+  // let dir = './web/' + tempF;
   let cmd =  exec1 + ' ' + puzzleSize;
 
-  console.log(dir);
+  // console.log(dir);
   console.log(cmd);
 
-  childProcess.exec(cmd, { cwd: dir }, (error, stdout, stderr) => {
+  childProcess.exec(cmd, (error, stdout, stderr) => {
     console.log('exec pb');
     console.log(error);
     console.log(stderr);
     console.log(stdout);
   });
 
-  let puzzlePiecesFile = './web/' + tempF + '/pieces';
-  let puzzleSolutionsFile = './web/' + tempF + '/first';
+  let puzzlePiecesFile = './pieces';
+  let puzzleSolutionsFile = './first';
 
   console.log(puzzlePiecesFile);
   console.log(puzzleSolutionsFile);
