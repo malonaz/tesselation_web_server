@@ -107,12 +107,13 @@ function generatePuzzle(puzzleSize, callback){
       console.log(hash);
       processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
 
-      //delete temp folder and its comments
-      fs.unlink(dir, noop);
       // returns generated hash
       callback(hash);
     });
   });
+  //delete temp folder and its comments
+  console.log('deleting ' + dir);
+  fs.unlink(dir, noop);
 }
 
 /// MAIN ///
