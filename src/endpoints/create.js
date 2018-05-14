@@ -119,25 +119,26 @@ router.post('/', (req, res, next) => {
     generatePuzzle(puzzleSize, (hash) => {
       // compute name of puzzle upload directory
       let puzzleDir = process.env.UPLOAD_DIR + '/' + hash;
-    });
+      console.log(puzzleDir);
 
-    console.log(puzzleDir);
+      if (!fs.existsSync(puzzleDir)){
+        console.log('ERROR PUZZLE NOT FOUND');
+        res.json({
+          msg: "puzzle not found"
+        });
+        return;
+      }
 
-    if (!fs.existsSync(puzzleDir)){
-      console.log('ERROR PUZZLE NOT FOUND');
-      res.json({
-        msg: "puzzle not found"
+      // read pieces from file and returns the data
+      let piecesFile = puzzleDir + '/pieces';
+      readPieces(piecesFile)
+      .then((data) => {
+        res.json({
+        hash: hash,
+        pieces: data
+        });
       });
-      return;
-    }
-
-    // read pieces from file and returns the data
-    let piecesFile = puzzleDir + '/pieces';
-    readPieces(piecesFile)
-    .then((data) => {
-      res.json({
-      hash: hash,
-      pieces: data
     });
-  });
+
+
 });
