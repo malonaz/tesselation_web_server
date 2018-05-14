@@ -89,7 +89,7 @@ function generatePuzzle(puzzleSize, callback){
     }
 
     hashFile(puzzlePiecesFile).then((hash) => {
-    // process puzzle - file management
+      // process puzzle - file management
       console.log(hash);
       processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
       //delete temp file
@@ -117,8 +117,10 @@ router.post('/', (req, res, next) => {
     console.log(puzzleSize);
 
     generatePuzzle(puzzleSize, (hash) => {
+
       // compute name of puzzle upload directory
       let puzzleDir = process.env.UPLOAD_DIR + '/' + hash;
+
       console.log(puzzleDir);
 
       if (!fs.existsSync(puzzleDir)){
@@ -139,6 +141,4 @@ router.post('/', (req, res, next) => {
         });
       });
     });
-
-
 });
