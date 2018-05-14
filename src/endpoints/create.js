@@ -5,6 +5,7 @@ const os = require('os');
 const childProcess = require('child_process');
 const crypto = require('crypto');
 const hashFile = require('./../lib/hashFile');
+var rimraf = require('rimraf');
 const noop = () => {};
 const Promise = require('bluebird');
 
@@ -63,8 +64,7 @@ function processPuzzle(hash, pieces, solution, tempDir) {
     moveFile(solution, newSolution);
 
     //delete temp folder and its comments
-    console.log('deleting ' + tempDir);
-    fs.unlink(tempDir, noop);
+    rimraf(tempDir, function () { console.log('deleted ' + tempDir);); })
 
     console.log('process puzzle completed');
 }
