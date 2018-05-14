@@ -66,7 +66,7 @@ function generatePuzzle(puzzleSize, callback){
 
   const exec1 = process.env.GENERATOR_PATH;
   let dir = './web/' + tempF;
-  let cmd = '"' + exec1 + '" "' + puzzleSize + '"';
+  let cmd =  exec1 + ' ' + puzzleSize;
 
   console.log(dir);
   console.log(cmd);
