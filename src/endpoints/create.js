@@ -10,6 +10,18 @@ const Promise = require('bluebird');
 
 module.exports = router;
 
+function readPieces(filename) {
+
+  return new Promise((resolve) => {
+    fs.readFile(filename, 'utf8', (err, data) => {
+      if (err) {
+        throw err;
+      }
+      resolve(data);
+    });
+  });
+}
+
 function moveFile(target, destination) {
   fs.renameSync(target, destination, function (err) {
     if (err) {
