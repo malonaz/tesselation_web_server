@@ -42,7 +42,7 @@ function processPuzzle(hash, pieces, solution) {
     const newPieces = puzzleDir + "pieces";
     const newSolution = puzzleDir + "first";
     moveFile(pieces, newPieces);
-    moveFile(pieces, newSolution);
+    moveFile(solution, newSolution);
 }
 
 function generatePuzzle(puzzleSize, callback){
