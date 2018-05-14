@@ -32,7 +32,7 @@ function moveFile(target, destination) {
   });
 }
 
-function processPuzzle(hash, pieces, solution) {
+function processPuzzle(hash, pieces, solution, tempDir) {
     console.log('process puzzle');
 
     // compute name of directory for puzzle with the given hash
@@ -61,6 +61,10 @@ function processPuzzle(hash, pieces, solution) {
     }
     moveFile(pieces, newPieces);
     moveFile(solution, newSolution);
+
+    //delete temp folder and its comments
+    console.log('deleting ' + tempDir);
+    fs.unlink(tempDir, noop);
 
     console.log('process puzzle completed');
 }
@@ -105,15 +109,11 @@ function generatePuzzle(puzzleSize, callback){
     hashFile(puzzlePiecesFile).then((hash) => {
       // process puzzle - file management
       console.log(hash);
-      processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile);
-
+      processPuzzle(hash, puzzlePiecesFile, puzzleSolutionsFile, dir);
       // returns generated hash
       callback(hash);
     });
   });
-  //delete temp folder and its comments
-  console.log('deleting ' + dir);
-  fs.unlink(dir, noop);
 }
 
 /// MAIN ///
