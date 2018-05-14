@@ -78,8 +78,8 @@ function generatePuzzle(puzzleSize, callback){
     console.log(stdout);
   });
 
-  let puzzlePiecesFile = './pieces';
-  let puzzleSolutionsFile = './first';
+  let puzzlePiecesFile = '/home/tps/web/pieces';
+  let puzzleSolutionsFile = '/home/tps/web/first';
 
   console.log(puzzlePiecesFile);
   console.log(puzzleSolutionsFile);
