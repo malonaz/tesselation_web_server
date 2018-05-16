@@ -64,8 +64,8 @@ function processPuzzle(hash, pieces, solution, tempDir) {
     moveFile(solution, newSolution);
 
     //delete temp folder and its comments
-    rimraf(tempDir, function () { console.log('deleted ' + tempDir);});
-
+    rimraf(tempDir);
+    console.log('deleted ' + tempDir);
     //console.log('process puzzle completed');
 }
 
